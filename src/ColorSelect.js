@@ -20,7 +20,7 @@ var btnStyle = {
 function ColorSelect(props) {
   return (
     <div>
-      <input type="color" value={props.color}/>
+      {/* <input type="color" value={props.color}/> */}
       <ul style={ulStyle}>
         {
           colors.map(color => (
