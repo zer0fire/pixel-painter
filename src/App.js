@@ -30,13 +30,16 @@ class App extends Component {
       console.log(info)
       this.setState({
         pixelData: this.state.pixelData.map((row, rowIndex) => {
-          if(rowIndex == info.now) {
+          if(rowIndex === info.row) {
             return row.map((color, colIdx) => {
-              
+              if (colIdx === info.col) {
+                return info.color
+              } else {
+                return color
+              }
             })
-            return info.color
           } else {
-            return color
+            return row
           }
         })
       })
@@ -52,7 +55,7 @@ class App extends Component {
   }
 
   changeCurrentColor = (color) => {
-    console.log(color)
+    // console.log(color)
     this.setState({
       currentColor: color
     })
