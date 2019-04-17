@@ -5,7 +5,19 @@ import './App.css';
 import PixelGrid from "./PixelGrid";
 import ColorSelect from "./ColorSelect";
 import { produce } from "immer";
+import _ from "lodash";
 
+/**
+ * 放大、拖拽、取色、限制频率、人数、页面内实时聊天
+ * 批量更新而不是单点更新
+ * PureComponent
+ * Hooks
+ * ReactDOM.createPortal
+ * socket.io
+ * canvas
+ * Jimp
+ * ArrayBuffer to image
+ */
 
 class App extends Component {
   constructor () {
@@ -14,32 +26,15 @@ class App extends Component {
       pixelData: [],
       currentColor: 'red',
     }
+    this.socket = io('ws://localhost:3005/')
   }
 
   componentDidMount () {
-    // 万一需要操作DOM，这边DOM以及渲染好了。如果执行setState等异步的set，可以显现出来，其他的立马render会显示不了数据
-    this.socket = io('ws://localhost:3005/')
-    this.socket.on('pixel-data', (data) => {
-      // console.log(data);
-      this.setState({
-        pixelData: data
-      })
-    })
 
-    this.socket.on('update-dot', (info)=> {
-      // console.log(info)
-      this.setState(produce(this.state, state => {
-        state.pixelData[info.row][info.col] = info.color
-      }))
-    })
   }
 
   handlePixelClick = (row, col) => {
-    this.socket.emit('draw-dot', {
-      row,
-      col,
-      color: this.state.currentColor,
-    })
+    
   }
 
   changeCurrentColor = (color) => {
@@ -56,7 +51,7 @@ class App extends Component {
     return (
       <div>
         pixel data
-        <PixelGrid onPixelClick={this.handlePixelClick} pixels={this.state.pixelData}></PixelGrid>
+        <PixelGrid currentColor={this.state.currentColor} onPixelClick={this.handlePixelClick} socket={this.socket}></PixelGrid>
         <ColorSelect onChange={this.changeCurrentColor} color={this.state.currentColor}></ColorSelect>
       </div>
     );
