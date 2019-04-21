@@ -5,7 +5,8 @@ import ReactDOM from "react-dom";
 
 const canvasStyle = {
   display: 'block',
-  boxShadow: '0px 0px 3px black'
+  boxShadow: '0px 0px 3px black',
+  
 }
 
 function createImageFromArrayBuffer(buf) {
@@ -21,6 +22,17 @@ function createImageFromArrayBuffer(buf) {
   })
 }
 
+function getMousePose(e) {
+  var layerX = e.layerX
+  var layerY = e.layerY
+  var zoom = e.target.style.transform.match(/scale\((.*?)\)/)[1]
+  return [
+    Math.floor(layerX / zoom), 
+    Math.floor(layerY / zoom)
+  ]
+}
+
+
 class PixelGrid extends Component {
   constructor (props) {
     super(props)
@@ -29,6 +41,9 @@ class PixelGrid extends Component {
       zoomLevel: 1,
       dotHoveX: -1,
       dotHoveY: -1,
+      isPickingColor: false,
+      width: 0,
+      height: 0,
     }
 
     this.socket = this.props.socket
@@ -62,9 +77,7 @@ class PixelGrid extends Component {
       } else {
         newZoomLevel = this.state.zoomLevel - 1
       }
-      if (newZoomLevel <= 0) {
-        newZoomLevel = 1
-      }
+
       // var zoomRatio = newZoomLevel / oldZoomLevel
 
       // l2 = ((a / b - 1) * x + l1 * a ) / b
@@ -85,7 +98,11 @@ class PixelGrid extends Component {
       var t1 = parseFloat(this.canvasWrapper.style.top) 
       var t2 = t1 -(b / a - 1) * y
 
-      
+      if (newZoomLevel < 1) { // 缩放系数小于1时复位
+        newZoomLevel = 1
+        l2 = 0;
+        t2 = 0;
+      }
 
       this.canvasWrapper.style.left = l2 + 'px'
       this.canvasWrapper.style.top = t2 + 'px'
@@ -97,7 +114,7 @@ class PixelGrid extends Component {
 
       e.preventDefault()
     })
-    this.setUpDragHandler()
+    
   }
  
   setUpDragHandler = () => {
@@ -141,14 +158,76 @@ class PixelGrid extends Component {
     this.canvasWrapper.addEventListener('mouseup', e => {
       dragging = false
       var mouseMoveDistance = Math.sqrt(mouseMoveX ** 2 + mouseMoveY ** 2)
-      if(mouseMoveDistance < 3) {
+      if(mouseMoveDistance < 3 && !this.state.isPickingColor) {
         this.handleDotClick(e)
       }
     })
   }
+  setUpPickColorHandler = () => {
+    function makeCursor(color) {
+      var cursor = document.createElement('canvas');
+      var ctx = cursor.getContext('2d');
+      cursor.width = 41;
+      cursor.height = 41;
+
+      ctx.beginPath();
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#000000';
+      ctx.moveTo(0, 6);
+      ctx.lineTo(12, 6);
+      ctx.moveTo(6, 0);
+      ctx.lineTo(6, 12);
+      ctx.stroke();
+
+      ctx.beginPath();
+      ctx.arc(25, 25, 14, 0, 2 * Math.PI, false);
+      ctx.lineWidth = 2;
+      ctx.strokeStyle = '#000000';
+      ctx.stroke();
+      ctx.beginPath();
+      ctx.arc(25, 25, 13.4, 0, 2 * Math.PI, false);
+      ctx.fillStyle = color;
+      ctx.fill();
+      return cursor.toDataURL()
+    }
+
+    this.canvas.addEventListener('mousemove', e => {
+      if(this.state.isPickingColor) {
+        var [x, y] = getMousePose(e) 
+        // console.log(x, y)
+        var pixelColor = Array.from(this.ctx.getImageData(x, y, 1, 1).data)
+        var pixelColorCss = 'rgba(' + pixelColor + ')'
+        // console.log(pixelColor, pixelColorCss)
+        var cursorUrl = makeCursor(pixelColorCss)
+        this.canvas.style.cursor = `url(${cursorUrl}) 6 6, crosshair`
+      }
+    })
+    this.canvas.addEventListener('click', e => {
+      if(this.state.isPickingColor) {
+        var [x, y] = getMousePose(e) 
+        var pixelColor = Array.from(this.ctx.getImageData(x, y, 1, 1).data)
+        var hexColor = '#' + pixelColor.slice(0, 3).map(it => {
+          return it.toString(16).padStart(2, '0')
+        }).join('')
+        this.props.onPickColor(hexColor)
+        this.setState({
+          isPickingColor: false,
+        })
+        this.canvas.style.cursor = ''
+      }
+    })
+  }
+
+  setPickColor = () => {
+    this.setState({
+      isPickingColor: true
+    })
+  } 
 
   componentDidMount () {
     this.setUpZoomHandler()
+    this.setUpDragHandler()
+    this.setUpPickColorHandler()
     
     this.canvas.style.imageRendering = 'pixelated'
     this.ctx = this.canvas.getContext('2d')
@@ -157,23 +236,17 @@ class PixelGrid extends Component {
       // console.log(pixelData)
       var image = await createImageFromArrayBuffer(pixelData)
 
-      // document.body.append(image)
-      // console.log(image.width)
-      // console.log(image.height)
       this.canvas.width = image.width
       this.canvas.height = image.height
+
+      this.setState({
+        width: image.width,
+        height: image.height,
+      })
+
       this.ctx.drawImage(image, 0, 0)
       this.forceUpdate()
-      // this.canvas.height = pixelData.length
-      // this.canvas.width = pixelData[0].length
-      // console.log('Initial')
-      // console.log(pixelData)
-      // pixelData.forEach((row, rowIdx) => {
-      //   row.forEach((color, colIdx) => {
-      //     // console.log({color})
-      //     this.draw(rowIdx, colIdx, color)
-      //   })
-      // })
+
     })
 
     this.socket.on('update-dot', ({row, col, color}) =>{
@@ -191,19 +264,23 @@ class PixelGrid extends Component {
     var el = document.getElementById('color-pick-placeholder')
     if(el) {
       return ReactDOM.createPortal((
-        <button>取色</button>
+        <button onClick={this.setPickColor}>{
+          this.state.isPickingColor ? '正在取色' : '取色'
+        }</button>
       ), el)
     } else {
       return null
     }
   }
 
+
+
   render () {
     console.log("PixelGrid render")
     return (
       <div style={{
-        width: this.props.width,
-        height: this.props.height,
+        width: this.state.width,
+        height: this.state.height,
         overflow: "hidden",
         margin: '120px',
         display: 'inline-block',
