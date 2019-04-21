@@ -51,8 +51,9 @@ class App extends Component {
     return (
       <div>
         pixel data
-        <PixelGrid currentColor={this.state.currentColor} onPixelClick={this.handlePixelClick} socket={this.socket}></PixelGrid>
+        <PixelGrid width={200} height={200} currentColor={this.state.currentColor} onPixelClick={this.handlePixelClick} socket={this.socket}></PixelGrid>
         <ColorSelect onChange={this.changeCurrentColor} color={this.state.currentColor}></ColorSelect>
+        <span id="color-pick-placeholder"></span>
       </div>
     );
   }
