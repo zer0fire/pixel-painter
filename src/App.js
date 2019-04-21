@@ -6,6 +6,7 @@ import PixelGrid from "./PixelGrid";
 import ColorSelect from "./ColorSelect";
 import { produce } from "immer";
 import _ from "lodash";
+import OnlineCount from './OnlineCount'
 
 /**
  * 放大、拖拽、取色、限制频率、人数、页面内实时聊天
@@ -24,9 +25,9 @@ class App extends Component {
     super()
     this.state = {
       pixelData: [],
-      currentColor: 'red',
+      currentColor: '#ff0000',
     }
-    this.socket = io('ws://localhost:3005/')
+    this.socket = io('ws://10.0.0.168:3005/')
   }
 
   componentDidMount () {
@@ -53,6 +54,7 @@ class App extends Component {
         <h1>pixel data</h1>
         <PixelGrid onPickColor={this.changeCurrentColor} width={200} height={200} currentColor={this.state.currentColor} onPixelClick={this.handlePixelClick} socket={this.socket}></PixelGrid>
         <ColorSelect onChange={this.changeCurrentColor} color={this.state.currentColor}></ColorSelect>
+        <OnlineCount socket={this.socket}></OnlineCount>
         <span id="color-pick-placeholder"></span>
       </div>
     );
