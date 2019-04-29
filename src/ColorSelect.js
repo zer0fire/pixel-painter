@@ -6,6 +6,9 @@ var colors = ['#ffffff', '#000000', '#ff0000', '#ffa500', '#ffff00', '#00ff00', 
 var ulStyle = {
   margin: 0,
   padding: 0,
+  marginLeft: '20px',
+  marginRight: '20px',
+  float: 'left',
 }
 
 var liStyle = {

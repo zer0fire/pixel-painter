@@ -27,7 +27,8 @@ class App extends Component {
       pixelData: [],
       currentColor: '#ff0000',
     }
-    this.socket = io('ws://10.0.0.168:3005/')
+    // this.socket = io('ws://10.0.0.168:3005/')
+    this.socket = io()
   }
 
   componentDidMount () {
@@ -51,7 +52,7 @@ class App extends Component {
     // console.log(this.state.pixelData)
     return (
       <div>
-        <h1>pixel data</h1>
+        {/* <h1>pixel data</h1> */}
         <PixelGrid onPickColor={this.changeCurrentColor} width={200} height={200} currentColor={this.state.currentColor} onPixelClick={this.handlePixelClick} socket={this.socket}></PixelGrid>
         <ColorSelect onChange={this.changeCurrentColor} color={this.state.currentColor}></ColorSelect>
         <OnlineCount socket={this.socket}></OnlineCount>

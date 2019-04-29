@@ -52,7 +52,7 @@ class PixelGrid extends Component {
   }
 
   handleDotClick = (e) => {
-    // console.log("click")
+    
     var layerX = e.layerX
     var layerY = e.layerY
     // e.nativeEvent.offsetX  也能解决点不准问题
@@ -158,9 +158,13 @@ class PixelGrid extends Component {
     this.canvasWrapper.addEventListener('mouseup', e => {
       dragging = false
       var mouseMoveDistance = Math.sqrt(mouseMoveX ** 2 + mouseMoveY ** 2)
+      console.log(mouseMoveDistance)
       if(mouseMoveDistance < 3 && !this.state.isPickingColor) {
         this.handleDotClick(e)
+        console.log("click", 'pick state', this.state.isPickingColor)
       }
+      mouseMoveX = 0
+      mouseMoveY = 0
     })
   }
   setUpPickColorHandler = () => {
@@ -282,7 +286,7 @@ class PixelGrid extends Component {
         width: this.state.width,
         height: this.state.height,
         overflow: "hidden",
-        margin: '120px',
+        margin: '20px',
         display: 'inline-block',
         border: '1px solid',
         position: "relative",
