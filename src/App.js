@@ -27,7 +27,7 @@ class App extends Component {
       pixelData: [],
       currentColor: '#ff0000',
     }
-    this.socket = io('ws://10.0.0.168:3005/')
+    this.socket = io()
   }
 
   componentDidMount () {

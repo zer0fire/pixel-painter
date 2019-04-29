@@ -161,6 +161,8 @@ class PixelGrid extends Component {
       if(mouseMoveDistance < 3 && !this.state.isPickingColor) {
         this.handleDotClick(e)
       }
+      mouseMoveX = 0
+      mouseMoveY = 0
     })
   }
   setUpPickColorHandler = () => {
@@ -276,7 +278,7 @@ class PixelGrid extends Component {
 
 
   render () {
-    console.log("PixelGrid render")
+    // console.log("PixelGrid render")
     return (
       <div style={{
         width: this.state.width,
