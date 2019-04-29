@@ -280,7 +280,7 @@ class PixelGrid extends Component {
 
 
   render () {
-    console.log("PixelGrid render")
+    // console.log("PixelGrid render")
     return (
       <div style={{
         width: this.state.width,
