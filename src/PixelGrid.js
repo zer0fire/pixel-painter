@@ -268,7 +268,7 @@ class PixelGrid extends Component {
     var el = document.getElementById('color-pick-placeholder')
     if(el) {
       return ReactDOM.createPortal((
-        <button onClick={this.setPickColor}>{
+        <button style={{marginLeft: '20px'}} onClick={this.setPickColor}>{
           this.state.isPickingColor ? '正在取色' : '取色'
         }</button>
       ), el)

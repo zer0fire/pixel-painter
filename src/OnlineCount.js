@@ -11,7 +11,7 @@ function useOnlineCount(socket) {
 function OnlineCount({socket}) {
   var count = useOnlineCount(socket)
 
-  return <div>在线人数: {count}</div>
+  return <div style={{margin: '20px'}}>在线人数: {count}</div>
 }
 
 export default OnlineCount
