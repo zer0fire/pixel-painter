@@ -27,7 +27,10 @@ class App extends Component {
       pixelData: [],
       currentColor: '#ff0000',
     }
-    this.socket = io()
+    this.socket = io('http://localhost:3001')
+    // this.socket.on("connect", (socket) => {
+    //   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
+    // })
   }
 
   componentDidMount () {
