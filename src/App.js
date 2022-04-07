@@ -4,8 +4,8 @@ import io from 'socket.io-client'
 import './App.css';
 import PixelGrid from "./PixelGrid";
 import ColorSelect from "./ColorSelect";
-import { produce } from "immer";
-import _ from "lodash";
+// import { produce } from "immer";
+// import _ from "lodash";
 import OnlineCount from './OnlineCount'
 
 /**
