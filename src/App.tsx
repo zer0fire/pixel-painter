@@ -1,4 +1,4 @@
-import React, { Component } from 'react';
+import React from 'react';
 // import React from 'react';
 import io from 'socket.io-client'
 import './App.css';
@@ -20,18 +20,13 @@ import OnlineCount from './OnlineCount'
  * ArrayBuffer to image
  */
 
-class App extends Component {
-  constructor () {
-    super()
-    this.state = {
-      pixelData: [],
-      currentColor: '#ff0000',
-    }
-    this.socket = io('http://localhost:3001')
-    // this.socket.on("connect", (socket) => {
-    //   console.log(socket.id); // x8WIv7-mJelg7on_ALbx
-    // })
+class App extends React.Component {
+  state: any = {
+    pixelData: [],
+    currentColor: '#ff0000',
   }
+  socket: any = io('http://localhost:3001')
+
 
   componentDidMount () {
 
