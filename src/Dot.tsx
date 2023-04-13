@@ -1,18 +1,27 @@
 import React, { PureComponent } from "react";
 
-class Dot extends PureComponent {
+interface Props {
+  onClick: Function;
+  row: number;
+  col: number;
+  color: any;
+}
+
+class Dot extends PureComponent<Props> {
   // debugger;
   render() {
-    console.log('dot render')
+    console.log("dot render");
     return (
-        <td onClick={() => this.props.onClick(this.props.row, this.props.col)} 
-              style={{
-                width: '5px',
-                height: '5px', 
-                backgroundColor: this.props.color,}}>
-        </td>
-      )
+      <td
+        onClick={() => this.props.onClick(this.props.row, this.props.col)}
+        style={{
+          width: "5px",
+          height: "5px",
+          backgroundColor: this.props.color,
+        }}
+      ></td>
+    );
   }
 }
 
-export default Dot
+export default Dot;

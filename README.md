@@ -1,6 +1,5 @@
 online demo: https://ebo.zer0fire.me
 
-
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 
 ## Available Scripts
@@ -9,23 +8,23 @@ In the project directory, you can run:
 
 ### `npm start`
 
-Runs the app in the development mode.<br>
+Runs the app in the development mode.`<br>`
 Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
 
-The page will reload if you make edits.<br>
+The page will reload if you make edits.`<br>`
 You will also see any lint errors in the console.
 
 ### `npm test`
 
-Launches the test runner in the interactive watch mode.<br>
+Launches the test runner in the interactive watch mode.`<br>`
 See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
 ### `npm run build`
 
-Builds the app for production to the `build` folder.<br>
+Builds the app for production to the `build` folder.`<br>`
 It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.<br>
+The build is minified and the filenames include the hashes.`<br>`
 Your app is ready to be deployed!
 
 See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
@@ -70,16 +69,16 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/de
 
 This section has moved here: https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify
 
-
 ### todo
-* TS 改写
-* 加入 webpack-proxy
-* 改写样式
-* 尝试替换 Rollup
-* 尝试用 function component
-* 单元测试
-* 加入计时点击
-* pm2 上线
-* CSS module
-* 尝试 immer
-* 尝试 github CI/CD
+
+- TS 改写 ？next 改写如何？
+- 加入 webpack-proxy
+- 改写样式？组件库 mui
+- 尝试替换为 Rollup
+- 尝试用 function component，多用 hooks
+- 单元测试
+- 加入计时点击
+- pm2 上线
+- CSS module
+- 尝试 immer
+- 尝试 github CI/CD
