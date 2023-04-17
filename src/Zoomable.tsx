@@ -1,15 +1,10 @@
-import React, { Component } from "react";
+import React, { useRef } from "react";
 
-class ZoomAble extends Component<{ children: React.ReactElement }> {
-  canvas: HTMLCanvasElement | null;
-  el: HTMLElement | null;
-  constructor(props) {
-    super(props);
-    this.canvas = null;
-    this.el = null;
-  }
+function ZoomAble({ children }: { children: React.ReactElement }) {
+  const el = useRef(null);
+  const canvas = useRef(null);
 
-  handleMouseWheel = (e) => {
+  const handleMouseWheel = (e) => {
     var deltaY = e.deltaY;
     try {
       var currentZoomLevel = parseFloat(
@@ -31,18 +26,16 @@ class ZoomAble extends Component<{ children: React.ReactElement }> {
     e.target.style.transform = `scale(${currentZoomLevel})`;
   };
 
-  render() {
-    let Child = this.props.children.type;
-    return (
-      <Child
-        ref={(el) => {
-          this.el = el;
-        }}
-        onWheel={this.handleMouseWheel}
-        {...this.props.children.props}
-      />
-    );
-  }
+  let Child = children.type;
+  return (
+    <Child
+      ref={(ele) => {
+        el.current = ele;
+      }}
+      onWheel={handleMouseWheel}
+      {...children.props}
+    />
+  );
 }
 
 export default ZoomAble;

@@ -1,4 +1,4 @@
-import React, { Component } from "react";
+import React, { Component, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 import PixelGrid from "./PixelGrid";
@@ -18,47 +18,37 @@ import OnlineCount from "./OnlineCount";
  * Jimp
  * ArrayBuffer to image
  */
+const socket: any = io("http://localhost:3001");
 
-class App extends Component {
-  state: any = {
-    pixelData: [],
-    currentColor: "#ff0000",
-  };
-  socket: any = io("http://localhost:3001");
+function App() {
+  const [pixelData, setPixelData] = useState([]);
+  const [currentColor, setColor] = useState("#ff0000");
 
-  componentDidMount() {}
+  const handlePixelClick = (row, col) => {};
 
-  handlePixelClick = (row, col) => {};
-
-  changeCurrentColor = (color) => {
-    // console.log(color)
-    this.setState({
-      currentColor: color,
-    });
+  const changeCurrentColor = (color) => {
+    setColor(color);
   };
 
-  render() {
-    // console.log(this.state.pixelData)
-    return (
+  return (
+    <React.StrictMode>
       <div>
         {/* <h1>pixel data</h1> */}
         <PixelGrid
-          onPickColor={this.changeCurrentColor}
-          width={200}
-          height={200}
-          currentColor={this.state.currentColor}
-          onPixelClick={this.handlePixelClick}
-          socket={this.socket}
+          onPickColor={changeCurrentColor}
+          currentColor={currentColor}
+          onPixelClick={handlePixelClick}
+          socket={socket}
         ></PixelGrid>
         <ColorSelect
-          onChange={this.changeCurrentColor}
-          color={this.state.currentColor}
+          onChange={changeCurrentColor}
+          color={currentColor}
         ></ColorSelect>
-        <OnlineCount socket={this.socket}></OnlineCount>
+        <OnlineCount socket={socket}></OnlineCount>
         <span id="color-pick-placeholder"></span>
       </div>
-    );
-  }
+    </React.StrictMode>
+  );
 }
 
 export default App;
