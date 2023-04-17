@@ -140,8 +140,8 @@ class PixelGrid extends Component<Props, State> {
     var initialTop;
     var mouseInitialX;
     var mouseInitialY;
-    var mouseMoveX;
-    var mouseMoveY;
+    var mouseMoveX = 0;
+    var mouseMoveY = 0;
     var dragging = false;
     if (!this.canvasWrapper || !this.canvas) {
       return;
