@@ -1,5 +1,4 @@
-import React, { Component } from "react";
-// import React from 'react';
+import React, { useRef, useState, useEffect, useCallback } from "react";
 import ReactDOM from "react-dom";
 
 const canvasStyle = {
@@ -26,83 +25,64 @@ function getMousePose(e) {
   var zoom = e.target.style.transform.match(/scale\((.*?)\)/)[1];
   return [Math.floor(layerX / zoom), Math.floor(layerY / zoom)];
 }
-
-interface State {
-  zoomLevel: number;
-  dotHoveX: number;
-  dotHoveY: number;
-  isPickingColor: boolean;
-  width: number;
-  height: number;
-}
 interface Props {
-  socket: any;
-  currentColor: any;
   onPickColor: Function;
-  width: number;
-  height: number;
+  currentColor: string;
   onPixelClick: Function;
+  socket: any;
 }
 
-class PixelGrid extends Component<Props, State> {
-  socket: any;
-  canvas: HTMLCanvasElement | null;
-  canvasWrapper: HTMLElement | null;
-  ctx: CanvasRenderingContext2D | null;
-  constructor(props) {
-    super(props);
+function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
+  const [zoomLevel, setZoomLevel] = useState(1);
+  const [dotHoveX, setDotHoveX] = useState(-1);
+  const [dotHoveY, setDotHoveY] = useState(-1);
+  const [isPickingColor, setIsPickingColor] = useState(false);
+  const [width, setWidth] = useState(200);
+  const [height, setHeight] = useState(200);
 
-    this.state = {
-      zoomLevel: 1,
-      dotHoveX: -1,
-      dotHoveY: -1,
-      isPickingColor: false,
-      width: 0,
-      height: 0,
-    };
+  // const [, update] = useState(null);
+  // const forceUpdate = useCallback(() => update(Object.create(null)), []);
 
-    this.socket = this.props.socket;
-    this.canvas = null;
-    this.canvasWrapper = null;
-    this.ctx = null;
-    // this.zoomLevel = 1
-  }
+  const canvas = useRef<HTMLCanvasElement | null>(null);
+  const canvasWrapper = useRef<HTMLDivElement | null>(null);
+  const ctx = useRef<CanvasRenderingContext2D | null>(null);
 
-  handleDotClick = (e) => {
+  const handleDotClick = (e) => {
     var layerX = e.layerX;
     var layerY = e.layerY;
     // e.nativeEvent.offsetX  也能解决点不准问题
-    var row = Math.floor(layerY / this.state.zoomLevel);
-    var col = Math.floor(layerX / this.state.zoomLevel);
+    var row = Math.floor(layerY / zoomLevel);
+    var col = Math.floor(layerX / zoomLevel);
 
     // console.log(row, col)
-    this.socket.emit("draw-dot", { row, col, color: this.props.currentColor });
+    socket.emit("draw-dot", { row, col, color: currentColor });
   };
 
-  setUpZoomHandler = () => {
-    this.canvas &&
-      this.canvas.addEventListener("mousewheel", (e: any) => {
+  const setUpZoomHandler = useCallback(() => {
+    canvas &&
+      canvas.current &&
+      canvas.current.addEventListener("mousewheel", (e: any) => {
         // console.log(e)
 
-        var mouseLayerX = e.layerX;
-        var mouseLayerY = e.layerY;
-        var newZoomLevel;
-        var oldZoomLevel = this.state.zoomLevel;
+        let mouseLayerX = e.layerX;
+        let mouseLayerY = e.layerY;
+        let newZoomLevel;
+        let oldZoomLevel = zoomLevel;
 
         if (e.deltaY < 0) {
-          newZoomLevel = this.state.zoomLevel + 1;
+          newZoomLevel = zoomLevel + 1;
         } else {
-          newZoomLevel = this.state.zoomLevel - 1;
+          newZoomLevel = zoomLevel - 1;
         }
 
         // var zoomRatio = newZoomLevel / oldZoomLevel
 
         // l2 = ((a / b - 1) * x + l1 * a ) / b
 
-        var a = oldZoomLevel;
-        var b = newZoomLevel;
-        var x = mouseLayerX;
-        var y = mouseLayerY;
+        let a = oldZoomLevel;
+        let b = newZoomLevel;
+        let x = mouseLayerX;
+        let y = mouseLayerY;
         // 用zoom，需要重排和计算放大倍数给left和top的影响
         // var l1 = parseFloat(this.canvas.style.left)
         // var l2 = (-(b / a - 1) * x + l1 * a ) / b
@@ -110,10 +90,10 @@ class PixelGrid extends Component<Props, State> {
         // var t2 = (-(b / a - 1) * y + t1 * a ) / b
 
         // 用transform，不必重排
-        if (this.canvasWrapper) {
-          var l1 = parseFloat(this.canvasWrapper.style.left);
+        if (canvasWrapper && canvasWrapper.current) {
+          var l1 = parseFloat(canvasWrapper.current.style.left);
           var l2 = l1 - (b / a - 1) * x;
-          var t1 = parseFloat(this.canvasWrapper.style.top);
+          var t1 = parseFloat(canvasWrapper.current.style.top);
           var t2 = t1 - (b / a - 1) * y;
 
           if (newZoomLevel < 1) {
@@ -123,48 +103,45 @@ class PixelGrid extends Component<Props, State> {
             t2 = 0;
           }
 
-          this.canvasWrapper.style.left = l2 + "px";
-          this.canvasWrapper.style.top = t2 + "px";
+          canvasWrapper.current.style.left = l2 + "px";
+          canvasWrapper.current.style.top = t2 + "px";
 
-          this.setState({
-            zoomLevel: newZoomLevel,
-          });
+          setZoomLevel(() => newZoomLevel);
 
           e.preventDefault();
         }
       });
-  };
+  }, [canvas.current, canvasWrapper.current, ctx.current]);
 
-  setUpDragHandler = () => {
-    var initialLeft;
-    var initialTop;
-    var mouseInitialX;
-    var mouseInitialY;
-    var mouseMoveX = 0;
-    var mouseMoveY = 0;
-    var dragging = false;
-    if (!this.canvasWrapper || !this.canvas) {
+  const setUpDragHandler = useCallback(() => {
+    let initialLeft;
+    let initialTop;
+    let mouseInitialX;
+    let mouseInitialY;
+    let mouseMoveX = 0;
+    let mouseMoveY = 0;
+    let dragging = false;
+    if (!canvasWrapper.current || !canvas.current) {
       return;
     }
-    this.canvasWrapper.addEventListener("mousedown", (e) => {
-      if (this.canvasWrapper) {
-        initialLeft = parseFloat(this.canvasWrapper.style.left);
-        initialTop = parseFloat(this.canvasWrapper.style.top);
+    canvasWrapper.current.addEventListener("mousedown", (e) => {
+      if (canvasWrapper.current) {
+        initialLeft = parseFloat(canvasWrapper.current.style.left);
+        initialTop = parseFloat(canvasWrapper.current.style.top);
         mouseInitialX = e.clientX;
         mouseInitialY = e.clientY;
         dragging = true;
       }
     });
-    this.canvas.addEventListener("mousemove", (e: any) => {
+    canvas.current.addEventListener("mousemove", (e: any) => {
       let x = 0;
       if (e && e.layerX) {
-        x = Math.floor(e.layerX / this.state.zoomLevel);
+        x = Math.floor(e.layerX / zoomLevel);
       }
-      var y = Math.floor(e.layerY / this.state.zoomLevel);
-      this.setState({
-        dotHoveX: x,
-        dotHoveY: y,
-      });
+      var y = Math.floor(e.layerY / zoomLevel);
+
+      setDotHoveX(x);
+      setDotHoveY(y);
     });
     window.addEventListener("mousemove", (e) => {
       if (dragging) {
@@ -174,31 +151,32 @@ class PixelGrid extends Component<Props, State> {
         mouseMoveY = mouseY - mouseInitialY;
         var left = initialLeft + mouseMoveX;
         var top = initialTop + mouseMoveY;
-        if (this.canvasWrapper) {
-          this.canvasWrapper.style.left = left + "px";
-          this.canvasWrapper.style.top = top + "px";
+        if (canvasWrapper.current) {
+          canvasWrapper.current.style.left = left + "px";
+          canvasWrapper.current.style.top = top + "px";
         }
       }
     });
     window.addEventListener("mouseup", (e) => {
       dragging = false;
     });
-    this.canvasWrapper.addEventListener("mouseup", (e) => {
-      dragging = false;
-      var mouseMoveDistance = Math.sqrt(mouseMoveX ** 2 + mouseMoveY ** 2);
-      console.log(mouseMoveDistance);
-      if (mouseMoveDistance < 3 && !this.state.isPickingColor) {
-        this.handleDotClick(e);
-        console.log("click", "pick state", this.state.isPickingColor);
-      }
-      mouseMoveX = 0;
-      mouseMoveY = 0;
-    });
-  };
-  setUpPickColorHandler = () => {
+    canvasWrapper.current &&
+      canvasWrapper.current.addEventListener("mouseup", (e) => {
+        dragging = false;
+        let mouseMoveDistance = Math.sqrt(mouseMoveX ** 2 + mouseMoveY ** 2);
+
+        if (mouseMoveDistance < 3 && !isPickingColor) {
+          handleDotClick(e);
+          console.log("click", "pick state", isPickingColor);
+        }
+        mouseMoveX = 0;
+        mouseMoveY = 0;
+      });
+  }, [canvas.current, canvasWrapper.current, ctx.current]);
+  const setUpPickColorHandler = useCallback(() => {
     function makeCursor(color) {
-      var cursor = document.createElement("canvas");
-      var ctx = cursor.getContext("2d");
+      let cursor = document.createElement("canvas");
+      let ctx = cursor.getContext("2d");
       cursor.width = 41;
       cursor.height = 41;
 
@@ -226,25 +204,29 @@ class PixelGrid extends Component<Props, State> {
       return cursor.toDataURL();
     }
 
-    this.canvas &&
-      this.canvas.addEventListener("mousemove", (e) => {
-        if (this.state.isPickingColor && this.ctx) {
+    canvas.current &&
+      canvas.current.addEventListener("mousemove", (e) => {
+        if (isPickingColor && ctx.current && canvas.current) {
           var [x, y] = getMousePose(e);
           // console.log(x, y)
-          var pixelColor = Array.from(this.ctx.getImageData(x, y, 1, 1).data);
+          var pixelColor = Array.from(
+            ctx.current.getImageData(x, y, 1, 1).data
+          );
           var pixelColorCss = "rgba(" + pixelColor + ")";
           // console.log(pixelColor, pixelColorCss)
           var cursorUrl = makeCursor(pixelColorCss);
-          if (this.canvas) {
-            this.canvas.style.cursor = `url(${cursorUrl}) 6 6, crosshair`;
+          if (canvas) {
+            canvas.current.style.cursor = `url(${cursorUrl}) 6 6, crosshair`;
           }
         }
       });
-    this.canvas &&
-      this.canvas.addEventListener("click", (e) => {
-        if (this.state.isPickingColor && this.ctx) {
+    canvas.current &&
+      canvas.current.addEventListener("click", (e) => {
+        if (isPickingColor && ctx.current) {
           var [x, y] = getMousePose(e);
-          var pixelColor = Array.from(this.ctx.getImageData(x, y, 1, 1).data);
+          var pixelColor = Array.from(
+            ctx.current.getImageData(x, y, 1, 1).data
+          );
           var hexColor =
             "#" +
             pixelColor
@@ -253,131 +235,125 @@ class PixelGrid extends Component<Props, State> {
                 return it.toString(16).padStart(2, "0");
               })
               .join("");
-          this.props.onPickColor(hexColor);
-          this.setState({
-            isPickingColor: false,
-          });
-          if (this.canvas) {
-            this.canvas.style.cursor = "";
+          onPickColor(hexColor);
+          setIsPickingColor(false);
+          if (canvas.current) {
+            canvas.current.style.cursor = "";
           }
         }
       });
+  }, [canvas.current, canvasWrapper.current, ctx.current]);
+
+  const setPickColor = () => {
+    setIsPickingColor(true);
   };
 
-  setPickColor = () => {
-    this.setState({
-      isPickingColor: true,
-    });
-  };
+  useEffect(() => {
+    setUpZoomHandler();
+    setUpDragHandler();
+    setUpPickColorHandler();
 
-  componentDidMount() {
-    this.setUpZoomHandler();
-    this.setUpDragHandler();
-    this.setUpPickColorHandler();
-
-    if (this.canvas) {
-      this.canvas.style.imageRendering = "pixelated";
-      this.ctx = this.canvas.getContext("2d");
+    if (canvas.current) {
+      canvas.current.style.imageRendering = "pixelated";
+      ctx.current = canvas.current.getContext("2d");
     }
 
-    this.socket.on("initial-pixel-data", async (pixelData) => {
+    socket.on("initial-pixel-data", async (pixelData) => {
       // console.log(pixelData)
       const image = await createImageFromArrayBuffer(pixelData);
 
-      if (this.canvas) {
-        this.canvas.width = image.width;
-        this.canvas.height = image.height;
+      if (canvas.current) {
+        canvas.current.width = image.width;
+        canvas.current.height = image.height;
       }
 
-      this.setState({
-        width: image.width,
-        height: image.height,
-      });
-
-      if (this.ctx) {
-        this.ctx.drawImage(image, 0, 0);
-        this.forceUpdate();
+      if (ctx.current) {
+        ctx.current.drawImage(image, 0, 0);
       }
+      console.log(image.width, image.height);
+      setWidth(() => image.width);
+      setHeight(() => image.height);
     });
 
-    this.socket.on("update-dot", ({ row, col, color }) => {
+    socket.on("update-dot", ({ row, col, color }) => {
       // console.log({row, col, color})
-      this.draw(col, row, color);
+      draw(col, row, color);
     });
-  }
+    return () => {
+      socket.off();
+    };
+  }, [canvas.current, canvasWrapper.current, ctx.current]);
 
-  draw = (row, col, color) => {
-    if (this.ctx) {
-      this.ctx.fillStyle = color;
-      this.ctx.fillRect(row, col, 1, 1);
+  const draw = (row, col, color) => {
+    if (ctx.current) {
+      ctx.current.fillStyle = color;
+      ctx.current.fillRect(row, col, 1, 1);
     }
   };
 
-  renderPickColorBtn() {
+  const renderPickColorBtn = () => {
     var el = document.getElementById("color-pick-placeholder");
     if (el) {
       return ReactDOM.createPortal(
-        <button style={{ marginLeft: "20px" }} onClick={this.setPickColor}>
-          {this.state.isPickingColor ? "正在取色" : "取色"}
+        <button style={{ marginLeft: "20px" }} onClick={setPickColor}>
+          {isPickingColor ? "正在取色" : "取色"}
         </button>,
         el
       );
     } else {
       return null;
     }
-  }
+  };
 
-  render() {
-    // console.log("PixelGrid render")
-    return (
+  // console.log("PixelGrid render")
+  return (
+    <div
+      style={{
+        width: width,
+        height: height,
+        overflow: "hidden",
+        margin: "20px",
+        display: "inline-block",
+        border: "1px solid",
+        position: "relative",
+      }}
+    >
+      {renderPickColorBtn()}
       <div
+        ref={canvasWrapper}
+        className="canvas-wrapper"
         style={{
-          width: this.state.width,
-          height: this.state.height,
-          overflow: "hidden",
-          margin: "20px",
-          display: "inline-block",
-          border: "1px solid",
-          position: "relative",
+          position: "absolute",
+          left: 0,
+          top: 0,
         }}
       >
-        {this.renderPickColorBtn()}
-        <div
-          ref={(el) => (this.canvasWrapper = el)}
-          className="canvas-wrapper"
+        <span
+          className="dot-hover-box"
           style={{
+            boxShadow: "0 0 1px black",
+            width: zoomLevel + "px",
+            height: zoomLevel + "px",
             position: "absolute",
-            left: 0,
-            top: 0,
+            left: dotHoveX * zoomLevel,
+            top: dotHoveY * zoomLevel,
+            zIndex: 8,
+            pointerEvents: "none",
           }}
-        >
-          <span
-            className="dot-hover-box"
-            style={{
-              boxShadow: "0 0 1px black",
-              width: this.state.zoomLevel + "px",
-              height: this.state.zoomLevel + "px",
-              position: "absolute",
-              left: this.state.dotHoveX * this.state.zoomLevel,
-              top: this.state.dotHoveY * this.state.zoomLevel,
-              zIndex: 8,
-              pointerEvents: "none",
-            }}
-          ></span>
-          <canvas
-            style={{
-              ...canvasStyle,
-              // zoom: this.state.zoomLevel
-              transform: "scale(" + this.state.zoomLevel + ")",
-              // 解决像素点不准的问题
-              transformOrigin: "top left",
-            }}
-            ref={(el) => (this.canvas = el)}
-          ></canvas>
-        </div>
+        ></span>
+        <canvas
+          style={{
+            ...canvasStyle,
+            // zoom: this.state.zoomLevel
+            transform: "scale(" + zoomLevel + ")",
+            // 解决像素点不准的问题
+            transformOrigin: "top left",
+          }}
+          ref={canvas}
+        ></canvas>
       </div>
-    );
-  }
+    </div>
+  );
 }
 
 export default PixelGrid;

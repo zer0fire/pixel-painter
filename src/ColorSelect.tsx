@@ -1,5 +1,5 @@
 // import React, { Component } from "react";
-import React from "react";
+import React, { PropsWithChildren } from "react";
 
 const colors = [
   "#ffffff",
@@ -30,7 +30,12 @@ const btnStyle: any = {
   height: "1em",
 };
 
-function ColorSelect(props) {
+interface ColorSelectProps {
+  color: string;
+  onChange: (color: string) => void;
+}
+
+function ColorSelect(props: PropsWithChildren<ColorSelectProps>) {
   return (
     <div>
       <input

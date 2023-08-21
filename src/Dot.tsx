@@ -1,4 +1,4 @@
-import React, { PureComponent } from "react";
+import React from "react";
 
 interface Props {
   onClick: Function;
@@ -7,21 +7,19 @@ interface Props {
   color: any;
 }
 
-class Dot extends PureComponent<Props> {
+function Dot(props: Props) {
   // debugger;
-  render() {
-    console.log("dot render");
-    return (
-      <td
-        onClick={() => this.props.onClick(this.props.row, this.props.col)}
-        style={{
-          width: "5px",
-          height: "5px",
-          backgroundColor: this.props.color,
-        }}
-      ></td>
-    );
-  }
+  console.log("dot render");
+  return (
+    <td
+      onClick={() => props.onClick(props.row, props.col)}
+      style={{
+        width: "5px",
+        height: "5px",
+        backgroundColor: props.color,
+      }}
+    ></td>
+  );
 }
 
-export default Dot;
+export default React.memo(Dot);
