@@ -14,9 +14,9 @@ function ZoomAble({ children }: { children: React.ReactElement }) {
       currentZoomLevel = 1;
     }
 
-    if (currentZoomLevel !== currentZoomLevel) {
-      currentZoomLevel = 1;
-    }
+    // if (currentZoomLevel !== currentZoomLevel) {
+    //   currentZoomLevel = 1;
+    // }
 
     if (deltaY < 0) {
       currentZoomLevel *= 1.25;
