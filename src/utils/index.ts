@@ -46,10 +46,17 @@ export function makeCursor(color) {
   return cursor.toDataURL();
 }
 
-export function transRGBTo16(color: string) {
+export function transRGBTo16(color: string): string {
   const list = color.split(",");
   return `#${parseInt(list[0]).toString(16)}${parseInt(list[1]).toString(
     16
   )}${parseInt(list[2]).toString(16)}`;
 }
-export function transColorToRGB() {}
+export function transColorToRGB(hexColor: string): string {
+  const matchRes = hexColor.match(/#(..)(..)(..)/);
+  if (!matchRes) return `rbg(0, 0, 0)`;
+  const r = parseInt(matchRes[1], 16);
+  const g = parseInt(matchRes[2], 16);
+  const b = parseInt(matchRes[3], 16);
+  return `rbg(${r}, ${g}, ${b})`;
+}

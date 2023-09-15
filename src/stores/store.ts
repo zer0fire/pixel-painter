@@ -1,4 +1,4 @@
-import { getMousePos } from "../utils/utils";
+import { getMousePos } from "../utils";
 import {
   Zoom,
   WrapperMouseUp,

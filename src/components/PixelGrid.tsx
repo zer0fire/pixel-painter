@@ -1,11 +1,7 @@
 import React, { useRef, useState, useEffect, useReducer } from "react";
 import ReactDOM from "react-dom";
 import { initialState, reducer } from "../stores/store";
-import {
-  createImageFromArrayBuffer,
-  getMousePos,
-  makeCursor,
-} from "../utils/utils";
+import { createImageFromArrayBuffer, getMousePos, makeCursor } from "../utils";
 import {
   Offset,
   PickColor,
