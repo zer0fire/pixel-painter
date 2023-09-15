@@ -1,4 +1,4 @@
-import { getMousePos } from "utils";
+import { getMousePos } from "../utils/utils";
 import {
   Zoom,
   WrapperMouseUp,
@@ -6,7 +6,7 @@ import {
   WrapperMouseDown,
   PickColor,
   Offset,
-} from "utils/const";
+} from "../utils/const";
 
 export const initialState = {
   zoomLevel: 1,
@@ -33,25 +33,17 @@ export function reducer(state, action) {
       let mouseLayerX = layerX;
       let mouseLayerY = layerY;
 
-      const a = oldZoomLevel;
-      const b = newZoomLevel;
-
-      const x = mouseLayerX;
-      console.log("🚀 ~ file: PixelGrid.tsx:47 ~ reducer ~ x:", x);
-      const y = mouseLayerY;
-      console.log("🚀 ~ file: PixelGrid.tsx:48 ~ reducer ~ y:", y);
-
-      // 用transform，不必重排
-      const oldL = parseFloat(oldLeft);
-      let newLeft = oldL - (b / a - 1) * x;
-      const oldT = parseFloat(oldTop);
-      let newTop = oldT - (b / a - 1) * y;
-
       if (deltaY > 0) {
         newZoomLevel = oldZoomLevel - 1;
       } else {
         newZoomLevel = oldZoomLevel + 1;
       }
+
+      // 用transform，不必重排
+      const oldL = parseFloat(oldLeft);
+      let newLeft = oldL - (newZoomLevel / oldZoomLevel - 1) * mouseLayerX;
+      const oldT = parseFloat(oldTop);
+      let newTop = oldT - (newZoomLevel / oldZoomLevel - 1) * mouseLayerY;
 
       if (newZoomLevel <= 1) {
         // 缩放系数小于1时复位
@@ -63,8 +55,8 @@ export function reducer(state, action) {
       return {
         ...state,
         zoomLevel: newZoomLevel,
-        wrapperLeft: -newLeft,
-        wrapperTop: -newTop,
+        wrapperLeft: newLeft,
+        wrapperTop: newTop,
       };
     }
     case WrapperMouseUp: {

@@ -1,4 +1,4 @@
-import React, { Component, useState } from "react";
+import React, { useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 import PixelGrid from "./PixelGrid";

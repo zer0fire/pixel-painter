@@ -1,7 +1,11 @@
 import React, { useRef, useState, useEffect, useReducer } from "react";
 import ReactDOM from "react-dom";
-import { initialState, reducer } from "store";
-import { createImageFromArrayBuffer, getMousePos } from "utils";
+import { initialState, reducer } from "../stores/store";
+import {
+  createImageFromArrayBuffer,
+  getMousePos,
+  makeCursor,
+} from "../utils/utils";
 import {
   Offset,
   PickColor,
@@ -9,7 +13,7 @@ import {
   WrapperMouseMove,
   WrapperMouseUp,
   Zoom,
-} from "utils/const";
+} from "../utils/const";
 
 const canvasStyle = {
   display: "block",
@@ -102,9 +106,10 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
   };
 
   function handleZoom(ev: any) {
+    draggingRef.current = false;
     const e = ev.nativeEvent;
     // 通过 body overflow=hidden 可以避免滚动
-    e.preventDefault();
+    // e.preventDefault();
     e.stopPropagation();
     // 用transform，不必重排
     if (canvasWrapper && canvasWrapper.current) {
@@ -114,8 +119,10 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
           deltaY: e.deltaY || 0,
           oldLeft: canvasWrapper.current.style.left || 0,
           oldTop: canvasWrapper.current.style.top || 0,
-          layerX: e.screenX || 0,
-          layerY: e.screenY || 0,
+          layerX: e.layerX || 0,
+          layerY: e.layerY || 0,
+          width: canvasWrapper.current.clientWidth || 0,
+          height: canvasWrapper.current.clientHeight || 0,
         },
       });
     }
@@ -273,6 +280,3 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
 }
 
 export default PixelGrid;
-function makeCursor(pixelColorCss: string) {
-  throw new Error("Function not implemented.");
-}
