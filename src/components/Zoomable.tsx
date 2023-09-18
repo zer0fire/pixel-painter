@@ -1,8 +1,14 @@
-import React, { useRef } from "react";
+import React, { useImperativeHandle, useRef } from "react";
 
 function ZoomAble({ children }: { children: React.ReactElement }) {
   const el = useRef(null);
   const canvas = useRef(null);
+
+  // useImperativeHandle(el, () => {
+  //   return {
+  //     focus: () => {},
+  //   };
+  // });
 
   const handleMouseWheel = (e) => {
     var deltaY = e.deltaY;
@@ -27,15 +33,7 @@ function ZoomAble({ children }: { children: React.ReactElement }) {
   };
 
   let Child = children.type;
-  return (
-    <Child
-      ref={(ele) => {
-        el.current = ele;
-      }}
-      onWheel={handleMouseWheel}
-      {...children.props}
-    />
-  );
+  return <Child ref={el} onWheel={handleMouseWheel} {...children.props} />;
 }
 
 export default ZoomAble;

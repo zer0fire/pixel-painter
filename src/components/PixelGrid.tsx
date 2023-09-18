@@ -23,21 +23,24 @@ interface Props {
   socket: any;
 }
 
-// TODO:
-// 1. 解决 socket 如何和 useState 通信问题
-// 2. 解决放大问题
-// 3. 解决取色问题
-
 function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
   const [canvasWidth, setCanvasWidth] = useState(100);
   const [canvasHeight, setCanvasHeight] = useState(100);
-
   const [state, dispatch] = useReducer(reducer, initialState);
 
   const canvas = useRef<HTMLCanvasElement | null>(null);
   const canvasWrapper = useRef<HTMLDivElement | null>(null);
   const ctx = useRef<CanvasRenderingContext2D | null>(null);
   const draggingRef = useRef<boolean>(false);
+
+  const {
+    wrapperLeft,
+    wrapperTop,
+    isPickingColor,
+    zoomLevel,
+    dotHoveX,
+    dotHoveY,
+  } = state;
 
   const handleWrapperMouseup = (e) => {
     const event = e.nativeEvent;
@@ -68,8 +71,8 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
           initialLeft: parseFloat(canvasWrapper.current.style.left),
           mouseInitialX: event.clientX,
           mouseInitialY: event.clientY,
-          initialX: state.wrapperLeft,
-          initialY: state.wrapperTop,
+          initialX: wrapperLeft,
+          initialY: wrapperTop,
           draggingRef,
         },
       });
@@ -77,14 +80,6 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
   };
 
   const handleWrapperMouseMove = (e: any) => {
-    // const zoomLevel = canvasRef.current.zoomLevel;
-    // let x = 0;
-    // if (e && e.layerX) {
-    //   x = Math.floor(e.layerX / zoomLevel);
-    // }
-    // let y = Math.floor(e.layerY / zoomLevel);
-    // canvasRef.current.dotHoveX = x;
-    // canvasRef.current.dotHoveY = y;
     const event = e.nativeEvent;
     dispatch({
       type: WrapperMouseMove,
@@ -103,9 +98,12 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
 
   function handleZoom(ev: any) {
     draggingRef.current = false;
-    const e = ev.nativeEvent;
+    // const e = ev.nativeEvent;
+    const e = ev;
     // 通过 body overflow=hidden 可以避免滚动
-    // e.preventDefault();
+    if (e.target === canvas.current) {
+      e.preventDefault();
+    }
     e.stopPropagation();
     // 用transform，不必重排
     if (canvasWrapper && canvasWrapper.current) {
@@ -124,27 +122,29 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     }
   }
 
+  function mouseMoveOnWindow(e) {
+    if (draggingRef.current) {
+      console.log("window.mousemove");
+      const mouseX = e.clientX;
+      const mouseY = e.clientY;
+      if (canvasWrapper.current) {
+        dispatch({
+          type: Offset,
+          payload: {
+            mouseX,
+            mouseY,
+          },
+        });
+      }
+    }
+  }
+
   useEffect(() => {
     if (!canvasWrapper.current || !canvas.current) {
       return;
     }
-    window.addEventListener("mousemove", (e) => {
-      if (draggingRef.current) {
-        console.log("window.mousemove");
-        const mouseX = e.clientX;
-        const mouseY = e.clientY;
-        if (canvasWrapper.current) {
-          dispatch({
-            type: Offset,
-            payload: {
-              mouseX,
-              mouseY,
-            },
-          });
-        }
-      }
-    });
-
+    canvas.current.addEventListener("wheel", handleZoom);
+    window.addEventListener("mousemove", mouseMoveOnWindow);
     window.addEventListener("mouseup", (e) => {
       console.log("window mouseUp");
 
@@ -200,7 +200,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     if (el) {
       return ReactDOM.createPortal(
         <button style={{ marginLeft: "20px" }} onClick={setPickColor}>
-          {state.isPickingColor ? "正在取色" : "取色"}
+          {isPickingColor ? "正在取色" : "取色"}
         </button>,
         el
       );
@@ -209,7 +209,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
   };
 
   const handleCanvasMouseMove = (e) => {
-    if (state.isPickingColor && ctx.current && canvas.current) {
+    if (isPickingColor && ctx.current && canvas.current) {
       let [x, y] = getMousePos(e.nativeEvent);
       // console.log(x, y)
       let pixelColor = Array.from(ctx.current.getImageData(x, y, 1, 1).data);
@@ -240,8 +240,8 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         className="canvas-wrapper"
         style={{
           position: "absolute",
-          left: state.wrapperLeft,
-          top: state.wrapperTop,
+          left: wrapperLeft,
+          top: wrapperTop,
         }}
         onMouseDown={handleWrapperMousedown}
         onMouseMove={handleWrapperMouseMove}
@@ -251,11 +251,11 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
           className="dot-hover-box"
           style={{
             boxShadow: "0 0 1px black",
-            width: state.zoomLevel + "px",
-            height: state.zoomLevel + "px",
+            width: zoomLevel + "px",
+            height: zoomLevel + "px",
             position: "absolute",
-            left: state.dotHoveX * state.zoomLevel,
-            top: state.dotHoveY * state.zoomLevel,
+            left: dotHoveX * zoomLevel,
+            top: dotHoveY * zoomLevel,
             zIndex: 8,
             pointerEvents: "none",
           }}
@@ -263,10 +263,10 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         <canvas
           style={{
             ...canvasStyle,
-            transform: "scale(" + state.zoomLevel + ")",
+            transform: "scale(" + zoomLevel + ")",
             transformOrigin: "top left",
           }}
-          onWheel={handleZoom}
+          // onWheel={handleZoom}
           ref={canvas}
           onMouseMove={handleCanvasMouseMove}
         ></canvas>
