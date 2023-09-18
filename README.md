@@ -71,17 +71,19 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 
 ### complete
 
-- 尝试用 function component，多用 hooks
+-   尝试用 function component，多用 hooks
 
 ### todo
 
-- TS 改写 ？next 改写如何？
-- 加入 webpack-proxy
-- 改写样式？组件库 mui
-- 尝试替换为 Rollup
-- 单元测试
-- 加入计时点击
-- pm2 上线
-- CSS module
-- 尝试 immer
-- 尝试 github CI/CD
+-   TS 改写 ？next 改写如何？
+-   加入 webpack-proxy
+-   改写样式？组件库 mui
+-   尝试替换为 Rollup
+-   单元测试
+-   加入计时点击
+-   pm2 上线
+-   CSS module
+-   尝试 immer
+-   尝试 github CI/CD
+-   tailwind-css
+-   nest + next 再加强一下
