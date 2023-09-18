@@ -87,3 +87,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 -   尝试 github CI/CD
 -   tailwind-css
 -   nest + next 再加强一下
+-   try to add some blog feature
+-   try to add some cli product
+-   try to add some game product
+-   add todo mvc
+-   try micro frontend

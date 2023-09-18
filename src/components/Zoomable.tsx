@@ -1,39 +1,39 @@
 import React, { useImperativeHandle, useRef } from "react";
 
 function ZoomAble({ children }: { children: React.ReactElement }) {
-  const el = useRef(null);
-  const canvas = useRef(null);
+    const el = useRef(null);
+    const canvas = useRef(null);
 
-  // useImperativeHandle(el, () => {
-  //   return {
-  //     focus: () => {},
-  //   };
-  // });
+    // useImperativeHandle(el, () => {
+    //   return {
+    //     focus: () => {},
+    //   };
+    // });
 
-  const handleMouseWheel = (e) => {
-    var deltaY = e.deltaY;
-    try {
-      var currentZoomLevel = parseFloat(
-        e.target.style.transform.match(/scale\((.*?)\)/)[1]
-      );
-    } catch (e) {
-      currentZoomLevel = 1;
-    }
+    const handleMouseWheel = (e) => {
+        var deltaY = e.deltaY;
+        try {
+            var currentZoomLevel = parseFloat(
+                e.target.style.transform.match(/scale\((.*?)\)/)[1]
+            );
+        } catch (e) {
+            currentZoomLevel = 1;
+        }
 
-    // if (currentZoomLevel !== currentZoomLevel) {
-    //   currentZoomLevel = 1;
-    // }
+        // if (currentZoomLevel !== currentZoomLevel) {
+        //   currentZoomLevel = 1;
+        // }
 
-    if (deltaY < 0) {
-      currentZoomLevel *= 1.25;
-    } else {
-      currentZoomLevel *= 0.8;
-    }
-    e.target.style.transform = `scale(${currentZoomLevel})`;
-  };
+        if (deltaY < 0) {
+            currentZoomLevel *= 1.25;
+        } else {
+            currentZoomLevel *= 0.8;
+        }
+        e.target.style.transform = `scale(${currentZoomLevel})`;
+    };
 
-  let Child = children.type;
-  return <Child ref={el} onWheel={handleMouseWheel} {...children.props} />;
+    let Child = children.type;
+    return <Child ref={el} onWheel={handleMouseWheel} {...children.props} />;
 }
 
 export default ZoomAble;

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useCallback, useContext, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 import PixelGrid from "./PixelGrid";
@@ -20,35 +20,41 @@ import OnlineCount from "./OnlineCount";
  */
 const socket: any = io("http://localhost:3001");
 
+export const colorContext = React.createContext({
+    color: "#ff0000",
+});
+
 function App() {
-  const [pixelData, setPixelData] = useState([]);
-  const [currentColor, setColor] = useState("#ff0000");
+    const [pixelData, setPixelData] = useState([]);
+    const [currentColor, setColor] = useState("#ff0000");
 
-  const handlePixelClick = (row, col) => {};
+    const { color } = useContext(colorContext);
 
-  const changeCurrentColor = (color) => {
-    setColor(color);
-  };
+    const handlePixelClick = (row, col) => {};
 
-  return (
-    <React.StrictMode>
-      <div>
-        {/* <h1>pixel data</h1> */}
-        <PixelGrid
-          onPickColor={changeCurrentColor}
-          currentColor={currentColor}
-          onPixelClick={handlePixelClick}
-          socket={socket}
-        ></PixelGrid>
-        <ColorSelect
-          onChange={changeCurrentColor}
-          color={currentColor}
-        ></ColorSelect>
-        <OnlineCount socket={socket}></OnlineCount>
-        <span id="color-pick-placeholder"></span>
-      </div>
-    </React.StrictMode>
-  );
+    const changeCurrentColor = useCallback((color) => {
+        setColor(color);
+    }, []);
+
+    return (
+        <React.StrictMode>
+            <div>
+                {/* <h1>pixel data</h1> */}
+                <PixelGrid
+                    onPickColor={changeCurrentColor}
+                    currentColor={currentColor}
+                    onPixelClick={handlePixelClick}
+                    socket={socket}
+                ></PixelGrid>
+                <ColorSelect
+                    onChange={changeCurrentColor}
+                    color={currentColor}
+                ></ColorSelect>
+                <OnlineCount socket={socket}></OnlineCount>
+                <span id="color-pick-placeholder"></span>
+            </div>
+        </React.StrictMode>
+    );
 }
 
 export default App;
