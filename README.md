@@ -92,3 +92,8 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 -   try to add some game product
 -   add todo mvc
 -   try micro frontend
+-   try rxjs
+-   try mutation
+-   瀑布流
+-   甘特图
+-   树状组件（任意层级拖动）

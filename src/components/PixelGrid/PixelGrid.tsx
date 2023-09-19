@@ -1,4 +1,10 @@
-import React, { useRef, useState, useEffect, useContext } from "react";
+import {
+    useRef,
+    useState,
+    useEffect,
+    useContext,
+    MouseEvent as ReactMouseEvent,
+} from "react";
 import ReactDOM from "react-dom";
 import { PixelGridContext } from "../../stores/store";
 import {
@@ -47,7 +53,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         dotHoveY,
     } = state;
 
-    const handleWrapperMouseup = (e) => {
+    const handleWrapperMouseup = (e: ReactMouseEvent) => {
         const event = e.nativeEvent;
         // draggingRef.current = false;
         dispatch({
@@ -65,7 +71,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         });
     };
 
-    const handleWrapperMousedown = (e) => {
+    const handleWrapperMousedown = (e: ReactMouseEvent) => {
         const event = e.nativeEvent;
         if (canvasWrapper.current) {
             draggingRef.current = true;
@@ -127,7 +133,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         }
     }
 
-    function mouseMoveOnWindow(e) {
+    function mouseMoveOnWindow(e: MouseEvent) {
         if (draggingRef.current) {
             console.log("window.mousemove");
             const mouseX = e.clientX;
@@ -144,56 +150,64 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         }
     }
 
+    const initialPixelData = async (pixelData: Buffer) => {
+        // console.log(pixelData)
+        const image = await createImageFromArrayBuffer(pixelData);
+
+        if (canvas.current) {
+            canvas.current.width = image.width;
+            canvas.current.height = image.height;
+        }
+
+        if (ctx.current) {
+            ctx.current.drawImage(image, 0, 0);
+        }
+        console.log(image.width, image.height);
+
+        // canvasRef.current.width = image.width;
+        // canvasRef.current.height = image.height;
+
+        setCanvasWidth(image.width);
+        setCanvasHeight(image.height);
+    };
+
+    const mouseUpOnWindow = (e: MouseEvent) => {
+        console.log("window mouseUp");
+        draggingRef.current = false;
+        if (canvas.current) {
+            canvas.current.style.cursor = "";
+        }
+    };
+
+    const updateDot = ({ row, col, color }: any) => {
+        // console.log({row, col, color})
+        draw(col, row, color);
+    };
+
     useEffect(() => {
         if (!canvasWrapper.current || !canvas.current) {
             return;
         }
+        canvas.current.focus();
         canvas.current.addEventListener("wheel", handleZoom);
         window.addEventListener("mousemove", mouseMoveOnWindow);
-        window.addEventListener("mouseup", (e) => {
-            console.log("window mouseUp");
-
-            draggingRef.current = false;
-            if (canvas.current) {
-                canvas.current.style.cursor = "";
-            }
-        });
+        window.addEventListener("mouseup", mouseUpOnWindow);
 
         if (canvas.current) {
             canvas.current.style.imageRendering = "pixelated";
             ctx.current = canvas.current.getContext("2d");
         }
 
-        socket.on("initial-pixel-data", async (pixelData) => {
-            // console.log(pixelData)
-            const image = await createImageFromArrayBuffer(pixelData);
-
-            if (canvas.current) {
-                canvas.current.width = image.width;
-                canvas.current.height = image.height;
-            }
-
-            if (ctx.current) {
-                ctx.current.drawImage(image, 0, 0);
-            }
-            console.log(image.width, image.height);
-
-            // canvasRef.current.width = image.width;
-            // canvasRef.current.height = image.height;
-
-            setCanvasWidth(image.width);
-            setCanvasHeight(image.height);
-        });
-        socket.on("update-dot", ({ row, col, color }) => {
-            // console.log({row, col, color})
-            draw(col, row, color);
-        });
+        socket.on("initial-pixel-data", initialPixelData);
+        socket.on("update-dot", updateDot);
         return () => {
             socket.off();
+            window.removeEventListener("mousemove", mouseMoveOnWindow);
+            window.removeEventListener("mouseup", mouseUpOnWindow);
         };
     }, []);
 
-    const draw = (row, col, color) => {
+    const draw = (row: number, col: number, color: string) => {
         if (ctx.current) {
             ctx.current.fillStyle = color;
             ctx.current.fillRect(row, col, 1, 1);
@@ -213,7 +227,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         return null;
     };
 
-    const handleCanvasMouseMove = (e) => {
+    const handleCanvasMouseMove = (e: ReactMouseEvent) => {
         if (isPickingColor && ctx.current && canvas.current) {
             let [x, y] = getMousePos(e.nativeEvent);
             // console.log(x, y)

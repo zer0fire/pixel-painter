@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useReducer, useState } from "react";
+import React, { useReducer, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
 import PixelGrid from "../PixelGrid/PixelGrid";
@@ -26,9 +26,9 @@ function App() {
     const [currentColor, setColor] = useState("#ff0000");
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const handlePixelClick = (row, col) => {};
+    const handlePixelClick = (row: number, col: number) => {};
 
-    const changeCurrentColor = (color) => {
+    const changeCurrentColor = (color: string) => {
         setColor(color);
     };
 
@@ -47,6 +47,7 @@ function App() {
                         onChange={changeCurrentColor}
                         color={currentColor}
                     ></ColorSelect>
+                    {/* <RecentColor></RecentColor> */}
                     <OnlineCount socket={socket}></OnlineCount>
                     <span id="color-pick-placeholder"></span>
                 </PixelGridContext.Provider>
