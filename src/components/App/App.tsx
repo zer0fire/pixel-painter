@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useState } from "react";
 import io from "socket.io-client";
 import "./App.css";
-import PixelGrid from "./PixelGrid";
-import ColorSelect from "./ColorSelect";
-import OnlineCount from "./OnlineCount";
+import PixelGrid from "../PixelGrid/PixelGrid";
+import ColorSelect from "../ColorSelect/ColorSelect";
+import OnlineCount from "../OnlineCount/OnlineCount";
 // import { produce } from "immer";
 // import _ from "lodash";
 

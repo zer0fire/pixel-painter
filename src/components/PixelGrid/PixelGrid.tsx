@@ -1,15 +1,20 @@
 import React, { useRef, useState, useEffect, useReducer } from "react";
 import ReactDOM from "react-dom";
-import { initialState, reducer } from "../stores/store";
-import { createImageFromArrayBuffer, getMousePos, makeCursor } from "../utils";
+import { initialState, reducer } from "../../stores/store";
+import {
+    createImageFromArrayBuffer,
+    getMousePos,
+    makeCursor,
+} from "../../utils";
 import {
     Offset,
     PickColor,
+    TOP_LAYER,
     WrapperMouseDown,
     WrapperMouseMove,
     WrapperMouseUp,
     Zoom,
-} from "../utils/const";
+} from "../../utils/const";
 
 const canvasStyle = {
     display: "block",
@@ -215,7 +220,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
             let pixelColor = Array.from(
                 ctx.current.getImageData(x, y, 1, 1).data
             );
-            let pixelColorCss = "rgba(" + pixelColor + ")";
+            let pixelColorCss = `rgba(${pixelColor})`;
             // console.log(pixelColor, pixelColorCss)
             let cursorUrl = makeCursor(pixelColorCss);
             if (canvas) {
@@ -253,19 +258,19 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                     className="dot-hover-box"
                     style={{
                         boxShadow: "0 0 1px black",
-                        width: zoomLevel + "px",
-                        height: zoomLevel + "px",
+                        width: `${zoomLevel}px`,
+                        height: `${zoomLevel}px`,
                         position: "absolute",
                         left: dotHoveX * zoomLevel,
                         top: dotHoveY * zoomLevel,
-                        zIndex: 8,
+                        zIndex: TOP_LAYER,
                         pointerEvents: "none",
                     }}
                 ></span>
                 <canvas
                     style={{
                         ...canvasStyle,
-                        transform: "scale(" + zoomLevel + ")",
+                        transform: `scale(${TOP_LAYER})`,
                         transformOrigin: "top left",
                     }}
                     // onWheel={handleZoom}
