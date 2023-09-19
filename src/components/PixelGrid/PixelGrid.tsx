@@ -1,6 +1,6 @@
-import React, { useRef, useState, useEffect, useReducer } from "react";
+import React, { useRef, useState, useEffect, useContext } from "react";
 import ReactDOM from "react-dom";
-import { initialState, reducer } from "../../stores/store";
+import { PixelGridContext } from "../../stores/store";
 import {
     createImageFromArrayBuffer,
     getMousePos,
@@ -31,7 +31,7 @@ interface Props {
 function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     const [canvasWidth, setCanvasWidth] = useState(100);
     const [canvasHeight, setCanvasHeight] = useState(100);
-    const [state, dispatch] = useReducer(reducer, initialState);
+    const { state, dispatch } = useContext(PixelGridContext);
 
     const canvas = useRef<HTMLCanvasElement | null>(null);
     const canvasWrapper = useRef<HTMLDivElement | null>(null);
@@ -270,7 +270,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 <canvas
                     style={{
                         ...canvasStyle,
-                        transform: `scale(${TOP_LAYER})`,
+                        transform: `scale(${zoomLevel})`,
                         transformOrigin: "top left",
                     }}
                     // onWheel={handleZoom}

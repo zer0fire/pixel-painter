@@ -1,3 +1,4 @@
+import React from "react";
 import { getMousePos } from "../utils";
 import {
     Zoom,
@@ -21,6 +22,8 @@ export const initialState = {
     mouseInitialY: 0,
     draggingRef: null,
 };
+
+export const PixelGridContext = React.createContext({} as any);
 
 export function reducer(state, action) {
     switch (action.type) {
