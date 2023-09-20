@@ -54,6 +54,7 @@ specifiers:
   react-router-dom: ^6.16.0
   resolve: 1.10.0
   rxjs: ^7.8.1
+  sass: ^1.67.0
   sass-loader: 7.1.0
   socket.io: ^2.2.0
   socket.io-client: ^4.4.1
@@ -136,9 +137,10 @@ devDependencies:
   eslint-plugin-react-hooks: 4.6.0_eslint@5.12.0
   eslint-plugin-react-refresh: 0.4.3_eslint@5.12.0
   jest: 23.6.0
+  sass: 1.67.0
   source-map-loader: 3.0.2_webpack@4.28.3
   typescript: 5.0.4
-  vite: 4.4.9
+  vite: 4.4.9_sass@1.67.0
   webpack-cli: 4.10.0_fc35ea27e34c7e37523b08f09d5772d4
   webpack-server: 0.1.2_react@18.2.0
 
@@ -2470,7 +2472,7 @@ packages:
       '@babel/plugin-transform-react-jsx-self': 7.22.5_@babel+core@7.22.20
       '@babel/plugin-transform-react-jsx-source': 7.22.5_@babel+core@7.22.20
       react-refresh: 0.14.0
-      vite: 4.4.9
+      vite: 4.4.9_sass@1.67.0
     transitivePeerDependencies:
       - supports-color
     dev: true
@@ -2757,7 +2759,7 @@ packages:
     dev: true
 
   /anymatch/2.0.0:
-    resolution: {integrity: sha512-5teOsQWABXHHBFP9y3skS5P3d/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/anymatch/-/anymatch-2.0.0.tgz}
+    resolution: {integrity: sha512-5teOsQWABXHHBFP9y3skS5P3d/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==}
     dependencies:
       micromatch: 3.1.10
       normalize-path: 2.1.1
@@ -2765,7 +2767,7 @@ packages:
       - supports-color
 
   /anymatch/2.0.0_supports-color@5.5.0:
-    resolution: {integrity: sha512-5teOsQWABXHHBFP9y3skS5P3d/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/anymatch/-/anymatch-2.0.0.tgz}
+    resolution: {integrity: sha512-5teOsQWABXHHBFP9y3skS5P3d/WfWXpv3FUpy+LorMrNYaT9pI4oLMQX7jzQ2KklNpGpWHzdCXTDT2Y3XGlZBw==}
     dependencies:
       micromatch: 3.1.10_supports-color@5.5.0
       normalize-path: 2.1.1
@@ -2773,12 +2775,11 @@ packages:
       - supports-color
 
   /anymatch/3.1.3:
-    resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/anymatch/-/anymatch-3.1.3.tgz}
+    resolution: {integrity: sha512-KMReFUr0B4t+D+OBkjR3KYqvocp2XaSzO55UcB6mgQMd3KbcE+mWTyvVV7D/zsdEbNnV6acZUutkiHQXvTr1Rw==}
     engines: {node: '>= 8'}
     dependencies:
       normalize-path: 3.0.0
       picomatch: 2.3.1
-    optional: true
 
   /append-transform/0.4.0:
     resolution: {integrity: sha512-Yisb7ew0ZEyDtRYQ+b+26o9KbiYPFxwcsxKzbssigzRRMJ9LpExPVUg6Fos7eP7yP3q7///tzze4nm4lTptPBw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/append-transform/-/append-transform-0.4.0.tgz}
@@ -3379,13 +3380,12 @@ packages:
     resolution: {integrity: sha512-vyL2OymJxmarO8gxMr0mhChsO9QGwhynfuu4+MHTAW6czfq9humCB7rKpUjDd9YUiDPU4mzpyupFSvOClAwbmQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/big.js/-/big.js-5.2.2.tgz}
 
   /binary-extensions/1.13.1:
-    resolution: {integrity: sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/binary-extensions/-/binary-extensions-1.13.1.tgz}
+    resolution: {integrity: sha512-Un7MIEDdUC5gNpcGDV97op1Ywk748MpHcFTHoYs6qnj1Z3j7I53VG3nwZhKzoBZmbdRNnb6WRdFlwl7tSDuZGw==}
     engines: {node: '>=0.10.0'}
 
   /binary-extensions/2.2.0:
-    resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/binary-extensions/-/binary-extensions-2.2.0.tgz}
+    resolution: {integrity: sha512-jDctJ/IVQbZoJykoeHbhXpOlNBqGNcwXJKJog42E5HDPUwQTSdjCHdihjj0DlnheQ7blbT6dHOafNAiS8ooQKA==}
     engines: {node: '>=8'}
-    optional: true
 
   /bindings/1.5.0:
     resolution: {integrity: sha512-p2q/t/mhvuOj/UeLlV6566GD/guowlr0hHxClI0W9m7MWYkL1F0hLo+0Aexs9HSPCtR1SXQ0TD3MMKrXZajbiQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/bindings/-/bindings-1.5.0.tgz}
@@ -3454,7 +3454,7 @@ packages:
       repeat-element: 1.1.4
 
   /braces/2.3.2:
-    resolution: {integrity: sha512-aNdbnj9P8PjdXU4ybaWLK2IF3jc/EoDYbC7AazW6to3TRsfXxscC9UXOB5iDiEQrkyIbWp2SLQda4+QAa7nc3w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/braces/-/braces-2.3.2.tgz}
+    resolution: {integrity: sha512-aNdbnj9P8PjdXU4ybaWLK2IF3jc/EoDYbC7AazW6to3TRsfXxscC9UXOB5iDiEQrkyIbWp2SLQda4+QAa7nc3w==}
     engines: {node: '>=0.10.0'}
     dependencies:
       arr-flatten: 1.1.0
@@ -3471,7 +3471,7 @@ packages:
       - supports-color
 
   /braces/2.3.2_supports-color@5.5.0:
-    resolution: {integrity: sha512-aNdbnj9P8PjdXU4ybaWLK2IF3jc/EoDYbC7AazW6to3TRsfXxscC9UXOB5iDiEQrkyIbWp2SLQda4+QAa7nc3w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/braces/-/braces-2.3.2.tgz}
+    resolution: {integrity: sha512-aNdbnj9P8PjdXU4ybaWLK2IF3jc/EoDYbC7AazW6to3TRsfXxscC9UXOB5iDiEQrkyIbWp2SLQda4+QAa7nc3w==}
     engines: {node: '>=0.10.0'}
     dependencies:
       arr-flatten: 1.1.0
@@ -3774,7 +3774,7 @@ packages:
     dev: false
 
   /chokidar/2.1.8:
-    resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/chokidar/-/chokidar-2.1.8.tgz}
+    resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
     deprecated: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
     dependencies:
       anymatch: 2.0.0
@@ -3794,7 +3794,7 @@ packages:
       - supports-color
 
   /chokidar/2.1.8_supports-color@5.5.0:
-    resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/chokidar/-/chokidar-2.1.8.tgz}
+    resolution: {integrity: sha512-ZmZUazfOzf0Nve7duiCKD23PFSCs4JPoYyccjUFF3aQkQadqBhfzhjkwBH2mNOG9cTBwhamM37EIsIkZw3nRgg==}
     deprecated: Chokidar 2 does not receive security updates since 2019. Upgrade to chokidar 3 with 15x fewer dependencies
     dependencies:
       anymatch: 2.0.0_supports-color@5.5.0
@@ -3827,7 +3827,6 @@ packages:
       readdirp: 3.6.0
     optionalDependencies:
       fsevents: 2.3.2
-    optional: true
 
   /chownr/1.1.4:
     resolution: {integrity: sha512-jJ0bqzaylmJtVnNgzTeSOs8DPavpbYgEr/b0YL8/2GO3xJEhInFmhKMUnEJQjZumK7KXGFhUy89PrsJWlakBVg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/chownr/-/chownr-1.1.4.tgz}
@@ -5901,7 +5900,7 @@ packages:
       repeat-string: 1.6.1
 
   /fill-range/4.0.0:
-    resolution: {integrity: sha512-VcpLTWqWDiTerugjj8e3+esbg+skS3M9e54UuR3iCeIDMXCLTsAH8hTSzDQU/X6/6t3eYkOKoZSef2PlU6U1XQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/fill-range/-/fill-range-4.0.0.tgz}
+    resolution: {integrity: sha512-VcpLTWqWDiTerugjj8e3+esbg+skS3M9e54UuR3iCeIDMXCLTsAH8hTSzDQU/X6/6t3eYkOKoZSef2PlU6U1XQ==}
     engines: {node: '>=0.10.0'}
     dependencies:
       extend-shallow: 2.0.1
@@ -6676,6 +6675,10 @@ packages:
     resolution: {integrity: sha512-O3sR1/opvCDGLEVcvrGTMtLac8GJ5IwZC4puPrLuRj3l7ICKvkmA0vGuU9OW8mV9WIBRnaxp5GJh9IEAaNOoYg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/immer/-/immer-1.10.0.tgz}
     dev: false
 
+  /immutable/4.3.4:
+    resolution: {integrity: sha512-fsXeu4J4i6WNWSikpI88v/PcVflZz+6kMhUfIwc5SY+poQRPnaf5V7qds6SUyUN3cVxEzuCab7QIoLOQ+DQ1wA==}
+    dev: true
+
   /import-cwd/2.1.0:
     resolution: {integrity: sha512-Ew5AZzJQFqrOV5BTW3EIoHAnoie1LojZLXKcCQ/yTRyVZosBhK1x1ViYjHGf5pAFOq8ZyChZp6m/fSN7pJyZtg==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/import-cwd/-/import-cwd-2.1.0.tgz}
     engines: {node: '>=4'}
@@ -6882,17 +6885,16 @@ packages:
       has-bigints: 1.0.2
 
   /is-binary-path/1.0.1:
-    resolution: {integrity: sha512-9fRVlXc0uCxEDj1nQzaWONSpbTfx0FmJfzHF7pwlI8DkWGoHBBea4Pg5Ky0ojwwxQmnSifgbKkI06Qv0Ljgj+Q==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/is-binary-path/-/is-binary-path-1.0.1.tgz}
+    resolution: {integrity: sha512-9fRVlXc0uCxEDj1nQzaWONSpbTfx0FmJfzHF7pwlI8DkWGoHBBea4Pg5Ky0ojwwxQmnSifgbKkI06Qv0Ljgj+Q==}
     engines: {node: '>=0.10.0'}
     dependencies:
       binary-extensions: 1.13.1
 
   /is-binary-path/2.1.0:
-    resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/is-binary-path/-/is-binary-path-2.1.0.tgz}
+    resolution: {integrity: sha512-ZMERYes6pDydyuGidse7OsHxtbI7WVeUEozgR/g7rd0xUimYNlvZRE/K2MgZTjWy725IfelLeVcEM97mmtRGXw==}
     engines: {node: '>=8'}
     dependencies:
       binary-extensions: 2.2.0
-    optional: true
 
   /is-boolean-object/1.1.2:
     resolution: {integrity: sha512-gDYaKHJmnj4aWxyj6YHyXVpdQawtVLHU5cb+eztPGczf6cjuTdwve5ZIEfgXqH4e57An1D1AKf8CZ3kYrQRqYA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/is-boolean-object/-/is-boolean-object-1.1.2.tgz}
@@ -8554,13 +8556,13 @@ packages:
       validate-npm-package-license: 3.0.4
 
   /normalize-path/2.1.1:
-    resolution: {integrity: sha512-3pKJwH184Xo/lnH6oyP1q2pMd7HcypqqmRs91/6/i2CGtWwIKGCkOOMTm/zXbgTEWHw1uNpNi/igc3ePOYHb6w==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/normalize-path/-/normalize-path-2.1.1.tgz}
+    resolution: {integrity: sha512-3pKJwH184Xo/lnH6oyP1q2pMd7HcypqqmRs91/6/i2CGtWwIKGCkOOMTm/zXbgTEWHw1uNpNi/igc3ePOYHb6w==}
     engines: {node: '>=0.10.0'}
     dependencies:
       remove-trailing-separator: 1.1.0
 
   /normalize-path/3.0.0:
-    resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/normalize-path/-/normalize-path-3.0.0.tgz}
+    resolution: {integrity: sha512-6eZs5Ls3WtCisHWp9S2GUy8dqkpGi4BVSz3GaqiE6ezub0512ESztXUwUB6C6IKbQkY2Pnb/mD4WYojCRwcwLA==}
     engines: {node: '>=0.10.0'}
 
   /normalize-range/0.1.2:
@@ -10103,7 +10105,7 @@ packages:
       util-deprecate: 1.0.2
 
   /readdirp/2.2.1:
-    resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/readdirp/-/readdirp-2.2.1.tgz}
+    resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==}
     engines: {node: '>=0.10'}
     dependencies:
       graceful-fs: 4.2.11
@@ -10113,7 +10115,7 @@ packages:
       - supports-color
 
   /readdirp/2.2.1_supports-color@5.5.0:
-    resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/readdirp/-/readdirp-2.2.1.tgz}
+    resolution: {integrity: sha512-1JU/8q+VgFZyxwrJ+SVIOsh+KywWGpds3NTqikiKpDMZWScmAYyKIgqkO+ARvNWJfXeXR1zxz7aHF4u4CyH6vQ==}
     engines: {node: '>=0.10'}
     dependencies:
       graceful-fs: 4.2.11
@@ -10123,11 +10125,10 @@ packages:
       - supports-color
 
   /readdirp/3.6.0:
-    resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/readdirp/-/readdirp-3.6.0.tgz}
+    resolution: {integrity: sha512-hOS089on8RduqdbhvQ5Z37A0ESjsqz6qnRcffsMU3495FuTdqSm+7bhJ29JvIOsBDEEnan5DPu9t3To9VRlMzA==}
     engines: {node: '>=8.10.0'}
     dependencies:
       picomatch: 2.3.1
-    optional: true
 
   /realpath-native/1.1.0:
     resolution: {integrity: sha512-wlgPA6cCIIg9gKz0fgAPjnzh4yR/LnXovwuo9hvyGvx3h8nX4+/iLZplfUWasXpqD8BdnGnP5njOFjkUwPzvjA==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/realpath-native/-/realpath-native-1.1.0.tgz}
@@ -10495,6 +10496,16 @@ packages:
       semver: 5.7.1
       webpack: 4.28.3_webpack-cli@4.10.0
     dev: false
+
+  /sass/1.67.0:
+    resolution: {integrity: sha512-SVrO9ZeX/QQyEGtuZYCVxoeAL5vGlYjJ9p4i4HFuekWl8y/LtJ7tJc10Z+ck1c8xOuoBm2MYzcLfTAffD0pl/A==}
+    engines: {node: '>=14.0.0'}
+    hasBin: true
+    dependencies:
+      chokidar: 3.5.3
+      immutable: 4.3.4
+      source-map-js: 1.0.2
+    dev: true
 
   /sax/1.2.4:
     resolution: {integrity: sha512-NqVDv9TpANUjFm0N8uM5GxL36UgKi9/atZw+x7YFnQ8ckwFGKrl4xX4yWtrey3UJm5nP1kUbnYgLopqWNSRhWw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/sax/-/sax-1.2.4.tgz}
@@ -10925,7 +10936,7 @@ packages:
     resolution: {integrity: sha512-qnQ7gVMxGNxsiL4lEuJwe/To8UnK7fAnmbGEEH8RpLouuKbeEm0lhbQVFIrNSuB+G7tVrAlVsZgETT5nljf+Iw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/source-list-map/-/source-list-map-2.0.1.tgz}
 
   /source-map-js/1.0.2:
-    resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/source-map-js/-/source-map-js-1.0.2.tgz}
+    resolution: {integrity: sha512-R0XvVJ9WusLiqTCEiGCmICCMplcCkIwwR11mOSD9CR5u+IXYdiseeEuXCVAjS54zqwkLcPNnmU4OeJ6tUrWhDw==}
     engines: {node: '>=0.10.0'}
     dev: true
 
@@ -11835,7 +11846,7 @@ packages:
     resolution: {integrity: sha512-j5oZxSO2DUNZfdQBZlNrxLAGDg1BEgT7njN73f9XDldKoNzv00zeyhgUY5jR70G6kdTrF0xOzESQnnvaJ/Td4g==, registry: https://registry.npm.taobao.org/, tarball: https://registry.npm.taobao.org/vhost/-/vhost-1.0.0.tgz}
     dev: true
 
-  /vite/4.4.9:
+  /vite/4.4.9_sass@1.67.0:
     resolution: {integrity: sha512-2mbUn2LlUmNASWwSCNSJ/EG2HuSRTnVNaydp6vMCm5VIqJsjMfbIWtbH2kDuwUVW5mMUKKZvGPX/rqeqVvv1XA==}
     engines: {node: ^14.18.0 || >=16.0.0}
     hasBin: true
@@ -11866,6 +11877,7 @@ packages:
       esbuild: 0.18.20
       postcss: 8.4.30
       rollup: 3.29.2
+      sass: 1.67.0
     optionalDependencies:
       fsevents: 2.3.2
     dev: true
