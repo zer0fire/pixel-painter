@@ -1,0 +1,90 @@
+* {
+    /* background-color: rgba(0, 0, 0, 0.08); */
+}
+body {
+    background-color: #f5f5f5;
+}
+.carousel-view {
+    width: 250px;
+    height: 300px;
+    position: relative;
+    overflow: hidden;
+    border-top: solid #83c44e 1px;
+}
+.carousel-main {
+    width: 250px;
+    height: 300px;
+    position: absolute;
+    transition: 0.3s linear;
+}
+.carousel-choice {
+    width: 250px;
+    height: 300px;
+    position: absolute;
+    text-align: center;
+    line-height: 40px;
+    top: 0;
+    bottom: 0;
+    right: 0;
+    left: 0;
+}
+.carousel-choice > img {
+    /* position: absolute; */
+    /* left:20px;  */
+    /* top: 20px; */
+    /* vertical-align: bottom; */
+    color: inherit;
+}
+.carousel-choice.second {
+    left: 250px;
+}
+.carousel-choice.third {
+    left: 500px;
+}
+.carousel-choice.fourth {
+    left: 750px;
+}
+#rd1:checked ~ div > .carousel-main {
+    right: 0px;
+}
+#rd2:checked ~ div > .carousel-main {
+    right: 250px;
+}
+#rd3:checked ~ div > .carousel-main {
+    right: 500px;
+}
+#rd4:checked ~ div > .carousel-main {
+    right: 750px;
+}
+section {
+    position: absolute;
+    bottom: 0;
+    right: 0;
+    left: 0;
+    width: 100px;
+    margin: auto;
+    font-size: 0;
+}
+label[for^="rd"] {
+    cursor: pointer;
+    vertical-align: middle;
+    display: inline-block;
+    margin-right: 10px;
+    width: 5px;
+    height: 5px;
+    background-color: #b0b0b0;
+    border-radius: 5px;
+}
+label[for^="rd"]:hover {
+    background-color: #ff6700;
+}
+#rd1:checked ~ div > section > label:nth-child(1),
+#rd2:checked ~ div > section > label:nth-child(2),
+#rd3:checked ~ div > section > label:nth-child(3),
+#rd4:checked ~ div > section > label:nth-child(4) {
+    background-color: white;
+    border: solid #ff6700;
+}
+input[id^="rd"] {
+    display: none;
+}

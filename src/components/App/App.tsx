@@ -22,11 +22,13 @@ import { PixelGridContext, initialState, reducer } from "../../stores/store";
 const socket: any = io("http://localhost:3001");
 
 function App() {
-    const [pixelData, setPixelData] = useState([]);
+    // const [pixelData, setPixelData] = useState([]);
     const [currentColor, setColor] = useState("#ff0000");
     const [state, dispatch] = useReducer(reducer, initialState);
 
-    const handlePixelClick = (row: number, col: number) => {};
+    const handlePixelClick = (
+        // row: number, col: number
+    ) => {};
 
     const changeCurrentColor = (color: string) => {
         setColor(color);

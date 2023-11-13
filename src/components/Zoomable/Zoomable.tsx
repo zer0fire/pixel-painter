@@ -1,8 +1,12 @@
-import React, { useImperativeHandle, useRef } from "react";
+import React, {
+    WheelEvent,
+    useRef,
+    // useImperativeHandle
+} from "react";
 
 function ZoomAble({ children }: { children: React.ReactElement }) {
     const el = useRef(null);
-    const canvas = useRef(null);
+    // const canvas = useRef(null);
 
     // useImperativeHandle(el, () => {
     //   return {
@@ -10,11 +14,11 @@ function ZoomAble({ children }: { children: React.ReactElement }) {
     //   };
     // });
 
-    const handleMouseWheel = (e) => {
+    const handleMouseWheel = (e: WheelEvent) => {
         var deltaY = e.deltaY;
         try {
             var currentZoomLevel = parseFloat(
-                e.target.style.transform.match(/scale\((.*?)\)/)[1]
+                (e.target as any).style.transform.match(/scale\((.*?)\)/)[1]
             );
         } catch (e) {
             currentZoomLevel = 1;
@@ -29,7 +33,7 @@ function ZoomAble({ children }: { children: React.ReactElement }) {
         } else {
             currentZoomLevel *= 0.8;
         }
-        e.target.style.transform = `scale(${currentZoomLevel})`;
+        (e.target as any).style.transform = `scale(${currentZoomLevel})`;
     };
 
     let Child = children.type;

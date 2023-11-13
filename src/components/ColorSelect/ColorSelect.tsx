@@ -1,5 +1,5 @@
 // import React, { Component } from "react";
-import React, { PropsWithChildren } from "react";
+import { PropsWithChildren } from "react";
 
 const colors = [
     "#ffffff",

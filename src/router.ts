@@ -4,6 +4,7 @@ import App from "./components/App/App";
 import HomePage from "./components/HomePage";
 import CssContent from "./components/CssContent";
 import HtmlContent from "./components/HtmlContent";
+import { PracticePage } from "./components/PracticePage";
 
 export const router = createBrowserRouter([
     {
@@ -21,5 +22,9 @@ export const router = createBrowserRouter([
     {
         path: "/html",
         element: React.createElement(HtmlContent),
+    },
+    {
+        path: "/practice",
+        element: React.createElement(PracticePage),
     },
 ]);

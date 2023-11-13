@@ -25,7 +25,7 @@ export const initialState = {
 
 export const PixelGridContext = React.createContext({} as any);
 
-export function reducer(state, action) {
+export function reducer(state: any, action: any) {
     switch (action.type) {
         case Zoom: {
             const { zoomLevel } = state;

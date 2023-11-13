@@ -97,3 +97,6 @@ This section has moved here: https://facebook.github.io/create-react-app/docs/tr
 -   瀑布流
 -   甘特图
 -   树状组件（任意层级拖动）
+-   强缓存，协商缓存
+-   docker
+-   nginx

@@ -171,7 +171,9 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         setCanvasHeight(image.height);
     };
 
-    const mouseUpOnWindow = (e: MouseEvent) => {
+    const mouseUpOnWindow = (
+        // e: MouseEvent
+    ) => {
         console.log("window mouseUp");
         draggingRef.current = false;
         if (canvas.current) {

@@ -1,4 +1,4 @@
-export function createImageFromArrayBuffer(buf): Promise<any> {
+export function createImageFromArrayBuffer(buf: Buffer): Promise<any> {
     return new Promise((resolve) => {
         let blob = new Blob([buf], { type: "image/jpeg" });
         let image = new Image();
@@ -11,14 +11,14 @@ export function createImageFromArrayBuffer(buf): Promise<any> {
     });
 }
 
-export function getMousePos(e) {
+export function getMousePos(e: any) {
     let layerX = e.layerX;
     let layerY = e.layerY;
     let zoom = e.target.style.transform.match(/scale\((.*?)\)/)[1];
     return [Math.floor(layerX / zoom), Math.floor(layerY / zoom)];
 }
 
-export function makeCursor(color) {
+export function makeCursor(color: string) {
     let cursor = document.createElement("canvas");
     let ctx = cursor.getContext("2d");
     cursor.width = 41;
