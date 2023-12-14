@@ -1,5 +1,5 @@
-import React, { useReducer, useState } from "react";
-import io from "socket.io-client";
+import React, { useEffect, useReducer, useRef, useState } from "react";
+import io, { Socket } from "socket.io-client";
 import "./App.css";
 import PixelGrid from "../PixelGrid/PixelGrid";
 import ColorSelect from "../ColorSelect/ColorSelect";
@@ -19,16 +19,25 @@ import { PixelGridContext, initialState, reducer } from "../../stores/store";
  * Jimp
  * ArrayBuffer to image
  */
-const socket: any = io("http://localhost:3001");
 
 function App() {
     // const [pixelData, setPixelData] = useState([]);
     const [currentColor, setColor] = useState("#ff0000");
     const [state, dispatch] = useReducer(reducer, initialState);
+    const socketRef = useRef<Socket | null>(null);
 
-    const handlePixelClick = (
+    useEffect(() => {
+        try {
+            const socket: Socket = io("http://localhost:3001");
+            socketRef.current = socket;
+        } catch (e) {
+            console.log(e);
+        }
+    }, []);
+
+    const handlePixelClick = () => {
         // row: number, col: number
-    ) => {};
+    };
 
     const changeCurrentColor = (color: string) => {
         setColor(color);

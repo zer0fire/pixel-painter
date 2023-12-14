@@ -21,6 +21,7 @@ import {
     WrapperMouseUp,
     Zoom,
 } from "../../utils/const";
+import { Socket } from "socket.io-client";
 
 const canvasStyle = {
     display: "block",
@@ -31,7 +32,7 @@ interface Props {
     onPickColor: Function;
     currentColor: string;
     onPixelClick: Function;
-    socket: any;
+    socket: Socket | null;
 }
 
 function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
@@ -171,9 +172,8 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         setCanvasHeight(image.height);
     };
 
-    const mouseUpOnWindow = (
+    const mouseUpOnWindow = () => {
         // e: MouseEvent
-    ) => {
         console.log("window mouseUp");
         draggingRef.current = false;
         if (canvas.current) {
@@ -200,10 +200,10 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
             ctx.current = canvas.current.getContext("2d");
         }
 
-        socket.on("initial-pixel-data", initialPixelData);
-        socket.on("update-dot", updateDot);
+        socket && socket.on("initial-pixel-data", initialPixelData);
+        socket && socket.on("update-dot", updateDot);
         return () => {
-            socket.off();
+            socket && socket.off();
             window.removeEventListener("mousemove", mouseMoveOnWindow);
             window.removeEventListener("mouseup", mouseUpOnWindow);
         };
@@ -217,7 +217,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     };
 
     const renderPickColorBtn = () => {
-        let el = document.getElementById("color-pick-placeholder");
+        const el = document.getElementById("color-pick-placeholder");
         if (el) {
             return ReactDOM.createPortal(
                 <button style={{ marginLeft: "20px" }} onClick={setPickColor}>
@@ -231,14 +231,14 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
 
     const handleCanvasMouseMove = (e: ReactMouseEvent) => {
         if (isPickingColor && ctx.current && canvas.current) {
-            let [x, y] = getMousePos(e.nativeEvent);
+            const [x, y] = getMousePos(e.nativeEvent);
             // console.log(x, y)
-            let pixelColor = Array.from(
+            const pixelColor = Array.from(
                 ctx.current.getImageData(x, y, 1, 1).data
             );
-            let pixelColorCss = `rgba(${pixelColor})`;
+            const pixelColorCss = `rgba(${pixelColor})`;
             // console.log(pixelColor, pixelColorCss)
-            let cursorUrl = makeCursor(pixelColorCss);
+            const cursorUrl = makeCursor(pixelColorCss);
             if (canvas) {
                 canvas.current.style.cursor = `url(${cursorUrl}) 6 6, crosshair`;
             }

@@ -6,8 +6,9 @@ interface PayParam {
     uid: number;
 }
 
+// const prefix = 'www.clicli.cc'
+const prefix = "http://localhost:3001";
+
 export function pay({ price, order, uid }: PayParam) {
-    return get(
-        `https://www.clicli.cc/vip/pay?price=${price}&order=${order}&uid=${uid}`
-    );
+    return get(`${prefix}/vip/pay?price=${price}&order=${order}&uid=${uid}`);
 }
