@@ -1,0 +1,20 @@
+.tool-box {
+    .modal {
+        position: fixed;
+        background-color: #fff;
+        width: 300px;
+        height: 200px;
+        bottom: 10px;
+
+        transition: transform 1s;
+        &.hide {
+            transform: translate(0, 90px);
+        }
+    }
+    .btn {
+        position: fixed;
+        background-color: #fff;
+        top: 50%;
+        transition: transform 1s;
+    }
+}

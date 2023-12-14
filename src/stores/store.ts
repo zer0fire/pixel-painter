@@ -89,7 +89,8 @@ export function reducer(state: any, action: any) {
 
                 onPixelClick({ row, col, color: currentColor });
                 // console.log(row, col)
-                socket.emit("draw-dot", { row, col, color: currentColor });
+                socket &&
+                    socket.emit("draw-dot", { row, col, color: currentColor });
                 // console.log("click", "pick state", isPickingColor);
             } else if (isPickingColor) {
                 if (isPickingColor && ctx.current) {

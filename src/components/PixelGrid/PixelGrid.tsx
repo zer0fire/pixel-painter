@@ -32,12 +32,13 @@ interface Props {
     onPickColor: Function;
     currentColor: string;
     onPixelClick: Function;
-    socket: Socket | null;
+    socket?: Socket | null;
 }
 
 function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     const [canvasWidth, setCanvasWidth] = useState(100);
     const [canvasHeight, setCanvasHeight] = useState(100);
+    const [el, setEl] = useState<HTMLElement | null>(null);
     const { state, dispatch } = useContext(PixelGridContext);
 
     const canvas = useRef<HTMLCanvasElement | null>(null);
@@ -216,18 +217,9 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         }
     };
 
-    const renderPickColorBtn = () => {
-        const el = document.getElementById("color-pick-placeholder");
-        if (el) {
-            return ReactDOM.createPortal(
-                <button style={{ marginLeft: "20px" }} onClick={setPickColor}>
-                    {isPickingColor ? "正在取色" : "取色"}
-                </button>,
-                el
-            );
-        }
-        return null;
-    };
+    useEffect(() => {
+        setEl(document.getElementById("color-pick-placeholder"));
+    }, []);
 
     const handleCanvasMouseMove = (e: ReactMouseEvent) => {
         if (isPickingColor && ctx.current && canvas.current) {
@@ -251,13 +243,21 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 width: canvasWidth,
                 height: canvasHeight,
                 overflow: "hidden",
-                margin: "20px",
                 display: "inline-block",
                 border: "1px solid",
                 position: "relative",
             }}
         >
-            {renderPickColorBtn()}
+            {el &&
+                ReactDOM.createPortal(
+                    <button
+                        style={{ marginLeft: "20px" }}
+                        onClick={setPickColor}
+                    >
+                        {isPickingColor ? "正在取色" : "取色"}
+                    </button>,
+                    el
+                )}
             <div
                 ref={canvasWrapper}
                 className="canvas-wrapper"

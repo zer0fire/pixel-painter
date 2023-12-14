@@ -1,10 +1,9 @@
 import React, { useEffect, useReducer, useRef, useState } from "react";
-import io, { Socket } from "socket.io-client";
-import "./App.css";
+import { Socket, Manager } from "socket.io-client";
+import "./App.scss";
 import PixelGrid from "../PixelGrid/PixelGrid";
-import ColorSelect from "../ColorSelect/ColorSelect";
-import OnlineCount from "../OnlineCount/OnlineCount";
 import { PixelGridContext, initialState, reducer } from "../../stores/store";
+import ToolBox from "../ToolBox";
 // import { produce } from "immer";
 // import _ from "lodash";
 
@@ -28,7 +27,12 @@ function App() {
 
     useEffect(() => {
         try {
-            const socket: Socket = io("http://localhost:3001");
+            const m = new Manager("http://localhost:3001");
+            const socket: Socket = m.socket("/");
+            socket.io.on("error", () => {
+                console.log("can not connect");
+                socket.close();
+            });
             socketRef.current = socket;
         } catch (e) {
             console.log(e);
@@ -48,19 +52,18 @@ function App() {
             <div>
                 <PixelGridContext.Provider value={{ state, dispatch }}>
                     {/* <h1>pixel data</h1> */}
+                    {/* lorem*100 */}
+                    <ToolBox
+                        changeCurrentColor={changeCurrentColor}
+                        socket={socketRef.current}
+                        currentColor={currentColor}
+                    ></ToolBox>
                     <PixelGrid
                         onPickColor={changeCurrentColor}
                         currentColor={currentColor}
                         onPixelClick={handlePixelClick}
-                        socket={socket}
+                        socket={socketRef.current}
                     ></PixelGrid>
-                    <ColorSelect
-                        onChange={changeCurrentColor}
-                        color={currentColor}
-                    ></ColorSelect>
-                    {/* <RecentColor></RecentColor> */}
-                    <OnlineCount socket={socket}></OnlineCount>
-                    <span id="color-pick-placeholder"></span>
                 </PixelGridContext.Provider>
             </div>
         </React.StrictMode>
