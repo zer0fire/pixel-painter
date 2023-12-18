@@ -7,7 +7,7 @@ import "./index.css";
 export default function Pay() {
     const [index, setIndex] = useState(0);
     const order = Math.floor(Math.random() * 10000000000);
-    const [user, setUser] = useState({});
+    const [user] = useState({});
     useEffect(() => {
         pay({
             price: list[index] / 100,

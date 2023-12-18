@@ -32,11 +32,12 @@ const canvasStyle = {
 interface Props {
     onPickColor: Function;
     currentColor: string;
-    onPixelClick: Function;
+    onPixelClick?: Function;
     socket?: Socket | null;
 }
 
-function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
+// onPixelClick
+function PixelGrid({ onPickColor, currentColor, socket }: Props) {
     const [canvasWidth, setCanvasWidth] = useState(100);
     const [canvasHeight, setCanvasHeight] = useState(100);
     const [el, setEl] = useState<HTMLElement | null>(null);
