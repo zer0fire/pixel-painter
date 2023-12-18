@@ -110,7 +110,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         });
     };
 
-    function handleZoom(ev: any) {
+    const handleZoom = (ev: any) => {
         draggingRef.current = false;
         // const e = ev.nativeEvent;
         const e = ev;
@@ -134,9 +134,9 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 },
             });
         }
-    }
+    };
 
-    function mouseMoveOnWindow(e: MouseEvent) {
+    const mouseMoveOnWindow = (e: MouseEvent) => {
         if (draggingRef.current) {
             console.log("window.mousemove");
             const mouseX = e.clientX;
@@ -151,7 +151,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 });
             }
         }
-    }
+    };
 
     const initialPixelData = async (pixelData: Buffer) => {
         // console.log(pixelData)
@@ -191,6 +191,29 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
         draw(col, row, color);
     };
 
+    const draw = (row: number, col: number, color: string) => {
+        if (ctx.current) {
+            ctx.current.fillStyle = color;
+            ctx.current.fillRect(row, col, 1, 1);
+        }
+    };
+
+    const handleCanvasMouseMove = (e: ReactMouseEvent) => {
+        if (isPickingColor && ctx.current && canvas.current) {
+            const [x, y] = getMousePos(e.nativeEvent);
+            // console.log(x, y)
+            const pixelColor = Array.from(
+                ctx.current.getImageData(x, y, 1, 1).data
+            );
+            const pixelColorCss = `rgba(${pixelColor})`;
+            // console.log(pixelColor, pixelColorCss)
+            const cursorUrl = makeCursor(pixelColorCss);
+            if (canvas) {
+                canvas.current.style.cursor = `url(${cursorUrl}) 6 6, crosshair`;
+            }
+        }
+    };
+
     useEffect(() => {
         if (!canvasWrapper.current || !canvas.current) {
             return;
@@ -218,6 +241,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 imageObj.src = imgUri;
             }
         }
+        setEl(document.getElementById("color-pick-placeholder"));
 
         return () => {
             socket && socket.off();
@@ -225,33 +249,6 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
             window.removeEventListener("mouseup", mouseUpOnWindow);
         };
     }, []);
-
-    const draw = (row: number, col: number, color: string) => {
-        if (ctx.current) {
-            ctx.current.fillStyle = color;
-            ctx.current.fillRect(row, col, 1, 1);
-        }
-    };
-
-    useEffect(() => {
-        setEl(document.getElementById("color-pick-placeholder"));
-    }, []);
-
-    const handleCanvasMouseMove = (e: ReactMouseEvent) => {
-        if (isPickingColor && ctx.current && canvas.current) {
-            const [x, y] = getMousePos(e.nativeEvent);
-            // console.log(x, y)
-            const pixelColor = Array.from(
-                ctx.current.getImageData(x, y, 1, 1).data
-            );
-            const pixelColorCss = `rgba(${pixelColor})`;
-            // console.log(pixelColor, pixelColorCss)
-            const cursorUrl = makeCursor(pixelColorCss);
-            if (canvas) {
-                canvas.current.style.cursor = `url(${cursorUrl}) 6 6, crosshair`;
-            }
-        }
-    };
 
     return (
         <div
@@ -262,6 +259,8 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 display: "inline-block",
                 border: "1px solid",
                 position: "relative",
+                left: "50%",
+                transform: "translate(-50%, 0)",
             }}
         >
             {el &&
