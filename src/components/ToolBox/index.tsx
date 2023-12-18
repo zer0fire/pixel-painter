@@ -34,7 +34,7 @@ export default function ToolBox({
                 <span id="color-pick-placeholder"></span>
             </div>
             <button onClick={toggle} className="btn">
-                &gt;111
+                &gt;Open
             </button>
         </div>
     );

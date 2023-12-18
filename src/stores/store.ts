@@ -1,5 +1,5 @@
 import React from "react";
-import { getMousePos } from "../utils";
+import { getMousePos, setLocalImg } from "../utils";
 import {
     Zoom,
     WrapperMouseUp,
@@ -89,9 +89,12 @@ export function reducer(state: any, action: any) {
 
                 onPixelClick({ row, col, color: currentColor });
                 // console.log(row, col)
-                socket &&
-                    socket.emit("draw-dot", { row, col, color: currentColor });
                 // console.log("click", "pick state", isPickingColor);
+                if (!socket.connected) {
+                    setLocalImg(canvas.current.toDataURL());
+                } else {
+                    socket.emit("draw-dot", { row, col, color: currentColor });
+                }
             } else if (isPickingColor) {
                 if (isPickingColor && ctx.current) {
                     let [x, y] = getMousePos(event);

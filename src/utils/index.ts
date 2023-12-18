@@ -1,4 +1,6 @@
-export function createImageFromArrayBuffer(buf: Buffer): Promise<any> {
+export function createImageFromArrayBuffer(
+    buf: Buffer
+): Promise<HTMLImageElement> {
     return new Promise((resolve) => {
         let blob = new Blob([buf], { type: "image/jpeg" });
         let image = new Image();
@@ -59,4 +61,13 @@ export function transColorToRGB(hexColor: string): string {
     const g = parseInt(matchRes[2], 16);
     const b = parseInt(matchRes[3], 16);
     return `rbg(${r}, ${g}, ${b})`;
+}
+
+// Init -> src close -> set Src
+export function getLocalImg(): string | null {
+    return window.localStorage.getItem("img") || "./summer-drawing-board.png";
+}
+
+export function setLocalImg(data: string): void {
+    return window.localStorage.setItem("img", data);
 }

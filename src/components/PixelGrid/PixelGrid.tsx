@@ -9,6 +9,7 @@ import ReactDOM from "react-dom";
 import { PixelGridContext } from "../../stores/store";
 import {
     createImageFromArrayBuffer,
+    getLocalImg,
     getMousePos,
     makeCursor,
 } from "../../utils";
@@ -65,7 +66,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
                 currentColor,
                 socket,
                 onPickColor,
-                onPixelClick,
+                onPixelClick: updateDot,
                 canvas,
                 ctx,
                 draggingRef,
@@ -155,7 +156,10 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
     const initialPixelData = async (pixelData: Buffer) => {
         // console.log(pixelData)
         const image = await createImageFromArrayBuffer(pixelData);
+        initCanvas(image);
+    };
 
+    function initCanvas(image: HTMLImageElement) {
         if (canvas.current) {
             canvas.current.width = image.width;
             canvas.current.height = image.height;
@@ -171,7 +175,7 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
 
         setCanvasWidth(image.width);
         setCanvasHeight(image.height);
-    };
+    }
 
     const mouseUpOnWindow = () => {
         // e: MouseEvent
@@ -203,6 +207,18 @@ function PixelGrid({ onPickColor, currentColor, onPixelClick, socket }: Props) {
 
         socket && socket.on("initial-pixel-data", initialPixelData);
         socket && socket.on("update-dot", updateDot);
+
+        if (!socket) {
+            const imgUri = getLocalImg();
+            const imageObj = new Image();
+            if (imgUri) {
+                imageObj.addEventListener("load", () => {
+                    initCanvas(imageObj);
+                });
+                imageObj.src = imgUri;
+            }
+        }
+
         return () => {
             socket && socket.off();
             window.removeEventListener("mousemove", mouseMoveOnWindow);
