@@ -11,7 +11,7 @@ const colors = [
     "#00ffff",
     "#0000ff",
     "#800080",
-];
+] as const;
 
 const ulStyle: any = {
     margin: 0,

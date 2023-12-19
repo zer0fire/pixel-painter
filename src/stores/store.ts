@@ -9,6 +9,14 @@ import {
     Offset,
 } from "../utils/const";
 
+export interface PixelContext {
+    state: typeof initialState;
+    dispatch: React.Dispatch<{
+        type: string;
+        payload?: any;
+    }>;
+}
+
 export const initialState = {
     zoomLevel: 1,
     wrapperLeft: 0,
@@ -21,11 +29,34 @@ export const initialState = {
     mouseInitialX: 0,
     mouseInitialY: 0,
     draggingRef: null,
+    initialX: -1,
+    initialY: -1,
+    mouseMoveX: -1,
+    mouseMoveY: -1,
 };
 
-export const PixelGridContext = React.createContext({} as any);
+export const PixelGridContext = React.createContext<PixelContext>({
+    state: {
+        zoomLevel: 1,
+        wrapperLeft: 0,
+        wrapperTop: 0,
+        dotHoveX: 0,
+        dotHoveY: 0,
+        isPickingColor: false,
+        initialLeft: 0,
+        initialTop: 0,
+        mouseInitialX: 0,
+        mouseInitialY: 0,
+        draggingRef: null,
+        initialX: -1,
+        initialY: -1,
+        mouseMoveX: -1,
+        mouseMoveY: -1,
+    },
+    dispatch: () => {},
+});
 
-export function reducer(state: any, action: any) {
+export function reducer(state: typeof initialState, action: any) {
     switch (action.type) {
         case Zoom: {
             const { zoomLevel } = state;

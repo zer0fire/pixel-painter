@@ -4,7 +4,7 @@ interface Props {
     onClick: Function;
     row: number;
     col: number;
-    color: any;
+    color: string;
 }
 
 function Dot(props: Props) {
