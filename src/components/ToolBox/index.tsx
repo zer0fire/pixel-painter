@@ -3,11 +3,12 @@ import ColorSelect from "../ColorSelect/ColorSelect";
 import OnlineCount from "../OnlineCount/OnlineCount";
 import "./index.scss";
 import { useCallback, useState } from "react";
+import UpIcon from "@mui/icons-material/KeyboardArrowUp";
 
 interface Props {
     changeCurrentColor: any;
     currentColor: string;
-    socket: Socket | null;
+    socket?: Socket;
 }
 
 export default function ToolBox({
@@ -34,7 +35,7 @@ export default function ToolBox({
                 <span id="color-pick-placeholder"></span>
             </div>
             <button onClick={toggle} className="btn">
-                &gt;Open
+                <UpIcon />
             </button>
         </div>
     );
