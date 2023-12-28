@@ -252,63 +252,63 @@ function PixelGrid({ onPickColor, currentColor, socket }: Props) {
     }, []);
 
     return (
-        <div
-            style={{
-                width: canvasWidth,
-                height: canvasHeight,
-                overflow: "hidden",
-                display: "inline-block",
-                border: "1px solid",
-                position: "relative",
-                left: "50%",
-                transform: "translate(-50%, 0)",
-            }}
-        >
-            {el &&
-                ReactDOM.createPortal(
-                    <button
-                        style={{ marginLeft: "20px" }}
-                        onClick={setPickColor}
-                    >
-                        {isPickingColor ? "正在取色" : "取色"}
-                    </button>,
-                    el
-                )}
+        <div style={{ display: "flex", justifyContent: "center" }}>
             <div
-                ref={canvasWrapper}
-                className="canvas-wrapper"
                 style={{
-                    position: "absolute",
-                    left: wrapperLeft,
-                    top: wrapperTop,
+                    width: canvasWidth,
+                    height: canvasHeight,
+                    overflow: "hidden",
+                    display: "inline-block",
+                    border: "1px solid",
+                    position: "relative",
                 }}
-                onMouseDown={handleWrapperMousedown}
-                onMouseMove={handleWrapperMouseMove}
-                onMouseUp={handleWrapperMouseup}
             >
-                <span
-                    className="dot-hover-box"
+                {el &&
+                    ReactDOM.createPortal(
+                        <button
+                            style={{ marginLeft: "20px" }}
+                            onClick={setPickColor}
+                        >
+                            {isPickingColor ? "正在取色" : "取色"}
+                        </button>,
+                        el
+                    )}
+                <div
+                    ref={canvasWrapper}
+                    className="canvas-wrapper"
                     style={{
-                        boxShadow: "0 0 1px black",
-                        width: `${zoomLevel}px`,
-                        height: `${zoomLevel}px`,
                         position: "absolute",
-                        left: dotHoveX * zoomLevel,
-                        top: dotHoveY * zoomLevel,
-                        zIndex: TOP_LAYER,
-                        pointerEvents: "none",
+                        left: wrapperLeft,
+                        top: wrapperTop,
                     }}
-                ></span>
-                <canvas
-                    style={{
-                        ...canvasStyle,
-                        transform: `scale(${zoomLevel})`,
-                        transformOrigin: "top left",
-                    }}
-                    // onWheel={handleZoom}
-                    ref={canvas}
-                    onMouseMove={handleCanvasMouseMove}
-                ></canvas>
+                    onMouseDown={handleWrapperMousedown}
+                    onMouseMove={handleWrapperMouseMove}
+                    onMouseUp={handleWrapperMouseup}
+                >
+                    <span
+                        className="dot-hover-box"
+                        style={{
+                            boxShadow: "0 0 1px black",
+                            width: `${zoomLevel}px`,
+                            height: `${zoomLevel}px`,
+                            position: "absolute",
+                            left: dotHoveX * zoomLevel,
+                            top: dotHoveY * zoomLevel,
+                            zIndex: TOP_LAYER,
+                            pointerEvents: "none",
+                        }}
+                    ></span>
+                    <canvas
+                        style={{
+                            ...canvasStyle,
+                            transform: `scale(${zoomLevel})`,
+                            transformOrigin: "top left",
+                        }}
+                        // onWheel={handleZoom}
+                        ref={canvas}
+                        onMouseMove={handleCanvasMouseMove}
+                    ></canvas>
+                </div>
             </div>
         </div>
     );
